@@ -8,3 +8,6 @@ html {
     box-sizing: border-box;
     max-width: 100%;
 }
+body {
+    background: #F0F4F7;
+}
