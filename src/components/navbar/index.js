@@ -41,11 +41,11 @@ const Container = styled.nav`
 `;
 
 export default (props) => {
-  const { updateToken, token } = useAxios();
+  const { token, logUserOut } = useAxios("");
 
   function handleLogout(e) {
     e.preventDefault();
-    updateToken(null);
+    logUserOut();
   }
 
   return (
