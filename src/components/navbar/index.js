@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import useAxios from "../../hooks/useAxios";
 
 const Container = styled.nav`
