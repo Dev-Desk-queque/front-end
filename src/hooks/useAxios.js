@@ -18,6 +18,10 @@ function useAxios(baseURL) {
 
   function setToken(newToken) {
     dispatch(logUserIn(newToken));
+    axiosWithAuth = axios.create({
+      baseURL: baseURL,
+      headers: { authorization: newToken },
+    });
   }
 
   function userLogOut() {
