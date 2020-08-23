@@ -1,5 +1,7 @@
 import React from "react";
 import { Route, Redirect, RouteProps } from "react-router-dom";
+import { iState } from "../reducer";
+import { useSelector } from "react-redux";
 
 /**
  * @param {string} redirectPath A path to redirect the user to (optional) if they are not authenticated
@@ -13,7 +15,7 @@ interface iPrivateRouteProps extends RouteProps {
 export default (props: iPrivateRouteProps) => {
   const { redirectPath, ...rest } = props;
 
-  const token = localStorage.getItem("token");
+  const token = useSelector((state: iState) => state.token);
   return (
     <>
       {token !== undefined && token !== null ? (
