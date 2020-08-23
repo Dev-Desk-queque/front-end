@@ -41,5 +41,7 @@ export default function useAxios(baseURL) {
     }
   }
 
-  return [axiosWithAuth, updateToken];
+  const token = localStorageToken;
+
+  return { axiosWithAuth, updateToken, token };
 }
