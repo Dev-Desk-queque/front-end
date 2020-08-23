@@ -8,7 +8,8 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 5rem;
+  margin-top: 7rem;
+  background: #F0F4F7;
 `;
 
 function App() {
