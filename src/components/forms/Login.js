@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import styled from "styled-components";
+import useAxios from '../../hooks/useAxios';
 
 
 const Container = styled.div`
@@ -12,6 +13,7 @@ const Container = styled.div`
 `;
 
 function Login() {
+  const {axiosWithAuth: axios} = useAxios();
   return (
     <div>
         <Container>
