@@ -2,6 +2,7 @@
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Navbar from "./components/navbar";
+import Login from './components/forms/Login'
 import styled from "styled-components";
 import PrivateRoute from "./components/PrivateRoute";
 import { useDispatch, useSelector } from "react-redux";
@@ -56,7 +57,7 @@ function App() {
           {/* Insert all routes between this switch statement */}
           <Switch>
             <Route path="/login">
-              <h2>NO LOGIN FOR YOU!</h2>
+              <Login />
             </Route>
 
             {/* Ut Oh... Gotta be logged in for this one... */}
