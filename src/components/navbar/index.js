@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { NavLink, Link, useLocation } from "react-router-dom";
+import DynamicLink from '../DynamicLink';
 import useAxios from "../../hooks/useAxios";
 
 const Container = styled.nav`
@@ -47,8 +48,6 @@ const Container = styled.nav`
 export default (props) => {
   const { token, logUserOut } = useAxios("");
 
-  const location = useLocation();
-
   function handleLogout(e) {
     e.preventDefault();
     logUserOut();
@@ -65,7 +64,6 @@ export default (props) => {
             <DynamicLink
               to="/create-issue"
               back="/dashboard"
-              location={location}
               backText="Dashboard"
             >
               New Issue
@@ -85,7 +83,6 @@ export default (props) => {
               to="/login"
               back="/"
               backText="Home"
-              location={location}
             >
               Login
             </DynamicLink>
@@ -95,17 +92,3 @@ export default (props) => {
     </>
   );
 };
-
-function DynamicLink({ location, to, back, backText, ...props }) {
-  const { pathname } = location;
-
-  return (
-    <React.Fragment>
-      {pathname !== to ? (
-        <Link {...props} to={to} />
-      ) : (
-        <Link to={back}>{backText || "Back"}</Link>
-      )}
-    </React.Fragment>
-  );
-}
