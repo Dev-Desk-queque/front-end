@@ -41,6 +41,7 @@ export const getIssues = (axios: AxiosInstance) => (dispatch: Function) => {
     .get("/api/devdesk/questions")
     .then((res) => {
       returnAction(types.SET_NETWORK_LOADING, false, dispatch);
+      returnAction(types.SET_NETWORK_ERROR, "", dispatch);
       returnAction(types.SET_ISSUES, res.data, dispatch);
     })
     .catch((err) => {
