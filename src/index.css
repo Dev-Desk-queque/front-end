@@ -1,13 +1,14 @@
 html {
-    font-size: 62.5%;
-    width: 100vw;
+  font-size: 62.5%;
+  width: 100vw;
+  overflow-x: hidden;
 }
 * {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-    max-width: 100%;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  max-width: 100%;
 }
 body {
-    background: #F0F4F7;
+  background: #f0f4f7;
 }
