@@ -1,8 +1,14 @@
+import { AxiosInstance } from "axios";
+import { v4 as uuid } from "uuid";
+import { iIssue } from "../reducer";
+
 export enum types {
   SET_NETWORK_LOADING = "SET_NETWORK_LOADING",
   SET_USER_LOGIN = "SET_USER_LOGIN",
   SET_USER_LOGOUT = "SET_USER_LOGOUT",
   SET_USER_TOKEN = "SET_USER_TOKEN",
+  SET_ISSUES = "SET_ISSUES",
+  SET_NETWORK_ERROR = "SET_NETWORK_ERROR",
 }
 
 export type iAction = {
@@ -28,4 +34,27 @@ export const logUserIn = (token: string) => (dispatch: Function) => {
 
 export const logUserOut = () => (dispatch: Function) => {
   returnAction(types.SET_USER_LOGOUT, null, dispatch);
+  returnAction(types.SET_NETWORK_ERROR, "", dispatch);
+};
+
+export const getIssues = (axios: AxiosInstance) => (dispatch: Function) => {
+  returnAction(types.SET_NETWORK_LOADING, true, dispatch);
+  axios
+    .get("/api/devdesk/questions")
+    .then((res) => {
+      const issues = res.data.map((issue: iIssue) => {
+        return { ...issue, key: uuid() };
+      });
+      returnAction(types.SET_NETWORK_LOADING, false, dispatch);
+      returnAction(types.SET_NETWORK_ERROR, "", dispatch);
+      returnAction(types.SET_ISSUES, issues, dispatch);
+    })
+    .catch((err) => {
+      returnAction(types.SET_NETWORK_LOADING, false, dispatch);
+      returnAction(
+        types.SET_NETWORK_ERROR,
+        err.response || err.message,
+        dispatch
+      );
+    });
 };

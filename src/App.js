@@ -1,8 +1,13 @@
-import React from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Navbar from "./components/navbar";
 import styled from "styled-components";
 import PrivateRoute from "./components/PrivateRoute";
+import { useDispatch, useSelector } from "react-redux";
+import useAxios from "./hooks/useAxios";
+import { getIssues } from "./actions";
+import Dashboard from "./components/dashboard";
 
 const Container = styled.div`
   display: flex;
@@ -10,14 +15,44 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   margin-top: 8rem;
+  .errors {
+    background: #ec3944;
+    color: #2f2b4a;
+    padding: 1rem 2rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    p {
+      font-size: 1.5rem;
+      font-weight: bolder;
+    }
+    margin-bottom: 2rem;
+    box-shadow: 0rem 0rem 0.25rem 0rem black;
+  }
 `;
 
 function App() {
+  const { token, axiosWithAuth: axios } = useAxios();
+  const dispatch = useDispatch();
+  const networkError = useSelector((state) => state.networkError);
+
+  useEffect(() => {
+    if (token) {
+      dispatch(getIssues(axios));
+    }
+  }, [token]);
+
   return (
     <React.Fragment>
       <Router>
         <Navbar />
         <Container>
+          {networkError && (
+            <div className="errors">
+              <p>{networkError}</p>
+            </div>
+          )}
           {/* Insert all routes between this switch statement */}
           <Switch>
             <Route path="/login">
@@ -25,8 +60,13 @@ function App() {
             </Route>
 
             {/* Ut Oh... Gotta be logged in for this one... */}
-            <PrivateRoute path="/dashboard" redirectPath='/test' >
-              <h2>You may have a token, but NO SOUP FOR YOU!</h2>
+            <PrivateRoute path="/dashboard" redirectPath="/login">
+              <Dashboard />
+            </PrivateRoute>
+
+            {/* Route to create a new issue */}
+            <PrivateRoute path="/create-issue" redirectPath="/login">
+              <h2>Create an issue</h2>
             </PrivateRoute>
 
             {/* Here is where people will land when they first get here! */}
