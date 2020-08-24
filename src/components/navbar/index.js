@@ -41,7 +41,7 @@ const Container = styled.nav`
 `;
 
 export default (props) => {
-  const { token, logUserOut } = useAxios("");
+  const { token, logUserOut } = useAxios("")
 
   function handleLogout(e) {
     e.preventDefault();

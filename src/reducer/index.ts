@@ -1,10 +1,5 @@
 import { iAction, types } from "../actions";
 
-export type iState = {
-  isLoading: boolean;
-  token: string | null;
-};
-
 const tryGetToken = () => {
   let toReturn;
   try {
@@ -17,10 +12,14 @@ const tryGetToken = () => {
   return toReturn;
 };
 
-const initialState: iState = {
+const initialState = {
   isLoading: false,
   token: tryGetToken(),
+  issues: [],
+  isHelper: false
 };
+
+export type iState = typeof initialState;
 
 export default function reducer(state = initialState, action: iAction): iState {
   switch (action.type) {

@@ -26,6 +26,7 @@ function useAxios(baseURL) {
 
   function userLogOut() {
     dispatch(logUserOut());
+    axiosWithAuth = axios.create({ baseURL: baseURL });
   }
 
   return {
