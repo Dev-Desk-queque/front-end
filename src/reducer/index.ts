@@ -1,5 +1,15 @@
 import { iAction, types } from "../actions";
 
+type iIssue = {
+  topic: string;
+  question: string;
+  id: number;
+  is_resolved: boolean;
+  what_I_tried: string | null;
+  code_language: string | null;
+  question_user_id: number;
+};
+
 const tryGetToken = () => {
   let toReturn;
   try {
@@ -15,8 +25,8 @@ const tryGetToken = () => {
 const initialState = {
   isLoading: false,
   token: tryGetToken(),
-  issues: [],
-  isHelper: false
+  issues: [] as Array<iIssue>,
+  isHelper: false,
 };
 
 export type iState = typeof initialState;
@@ -39,6 +49,9 @@ export default function reducer(state = initialState, action: iAction): iState {
       } finally {
         return { ...state, token: null };
       }
+
+    case types.SET_ISSUES:
+      return { ...state, issues: action.payload as Array<iIssue> };
 
     default:
       return state;

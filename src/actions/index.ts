@@ -1,6 +1,4 @@
 import { AxiosInstance } from "axios";
-import { questions } from "../dummyData";
-import { BASE_URL } from "../utils/constants";
 
 export enum types {
   SET_NETWORK_LOADING = "SET_NETWORK_LOADING",
@@ -37,8 +35,14 @@ export const logUserOut = () => (dispatch: Function) => {
 
 export const getIssues = (axios: AxiosInstance) => (dispatch: Function) => {
   returnAction(types.SET_NETWORK_LOADING, true, dispatch);
-  setTimeout(() => {
-    returnAction(types.SET_NETWORK_LOADING, false, dispatch);
-    returnAction(types.SET_ISSUES, questions, dispatch);
-  }, 1500);
+  axios
+    .get("/api/devdesk/questions")
+    .then((res) => {
+      returnAction(types.SET_NETWORK_LOADING, false, dispatch);
+      returnAction(types.SET_ISSUES, res.data, dispatch);
+    })
+    .catch((err) => {
+      returnAction(types.SET_NETWORK_LOADING, false, dispatch);
+      console.log(err);
+    });
 };

@@ -25,7 +25,7 @@ function App() {
             </Route>
 
             {/* Ut Oh... Gotta be logged in for this one... */}
-            <PrivateRoute path="/dashboard" redirectPath='/test' >
+            <PrivateRoute path="/dashboard" redirectPath="/test">
               <h2>You may have a token, but NO SOUP FOR YOU!</h2>
             </PrivateRoute>
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import styled from "styled-components";
+import styled from "../dashboard/node_modules/styled-components";
 import useAxios from '../../hooks/useAxios';
 
 
