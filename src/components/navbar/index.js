@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { NavLink, Link, useHistory } from "react-router-dom";
+import { NavLink, Link, useLocation } from "react-router-dom";
 import useAxios from "../../hooks/useAxios";
 
 const Container = styled.nav`
@@ -47,6 +47,8 @@ const Container = styled.nav`
 export default (props) => {
   const { token, logUserOut } = useAxios("");
 
+  const location = useLocation();
+
   function handleLogout(e) {
     e.preventDefault();
     logUserOut();
@@ -60,7 +62,12 @@ export default (props) => {
             <h1>DeskOverflow</h1>
           </div>
           <div className="links">
-            <DynamicLink to="/create-issue" back="/dashboard">
+            <DynamicLink
+              to="/create-issue"
+              back="/dashboard"
+              location={location}
+              backText="Dashboard"
+            >
               New Issue
             </DynamicLink>
             <div className="link" onClick={handleLogout}>
@@ -74,7 +81,14 @@ export default (props) => {
             <h1>DeskOverflow</h1>
           </div>
           <div className="links">
-            <NavLink to="/login">Login</NavLink>
+            <DynamicLink
+              to="/login"
+              back="/"
+              backText="Home"
+              location={location}
+            >
+              Login
+            </DynamicLink>
           </div>
         </Container>
       )}
@@ -82,18 +96,15 @@ export default (props) => {
   );
 };
 
-function DynamicLink(props) {
-  const { pathname } = useHistory().location;
-  const { to } = props;
-
-  console.log(pathname, to);
+function DynamicLink({ location, to, back, backText, ...props }) {
+  const { pathname } = location;
 
   return (
     <React.Fragment>
       {pathname !== to ? (
-        <Link {...props} />
+        <Link {...props} to={to} />
       ) : (
-        <Link to={props.back}>Back</Link>
+        <Link to={back}>{backText || "Back"}</Link>
       )}
     </React.Fragment>
   );
