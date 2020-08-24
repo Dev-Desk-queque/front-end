@@ -27,6 +27,7 @@ const initialState = {
   token: tryGetToken(),
   issues: [] as Array<iIssue>,
   isHelper: false,
+  networkError: "",
 };
 
 export type iState = typeof initialState;
@@ -52,6 +53,9 @@ export default function reducer(state = initialState, action: iAction): iState {
 
     case types.SET_ISSUES:
       return { ...state, issues: action.payload as Array<iIssue> };
+
+    case types.SET_NETWORK_ERROR:
+      return {...state, networkError: action.payload};
 
     default:
       return state;

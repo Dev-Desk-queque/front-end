@@ -6,6 +6,7 @@ export enum types {
   SET_USER_LOGOUT = "SET_USER_LOGOUT",
   SET_USER_TOKEN = "SET_USER_TOKEN",
   SET_ISSUES = "SET_ISSUES",
+  SET_NETWORK_ERROR = "SET_NETWORK_ERROR",
 }
 
 export type iAction = {
@@ -31,6 +32,7 @@ export const logUserIn = (token: string) => (dispatch: Function) => {
 
 export const logUserOut = () => (dispatch: Function) => {
   returnAction(types.SET_USER_LOGOUT, null, dispatch);
+  returnAction(types.SET_NETWORK_ERROR, "", dispatch);
 };
 
 export const getIssues = (axios: AxiosInstance) => (dispatch: Function) => {
@@ -43,6 +45,10 @@ export const getIssues = (axios: AxiosInstance) => (dispatch: Function) => {
     })
     .catch((err) => {
       returnAction(types.SET_NETWORK_LOADING, false, dispatch);
-      console.log(err);
+      returnAction(
+        types.SET_NETWORK_ERROR,
+        err.response || err.message,
+        dispatch
+      );
     });
 };
