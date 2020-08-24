@@ -1,11 +1,4 @@
-<<<<<<< HEAD
-import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import styled from "../dashboard/node_modules/styled-components";
-import useAxios from '../../hooks/useAxios';
-
-=======
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -14,7 +7,6 @@ import {
 } from "react-router-dom";
 import styled from "styled-components";
 import useAxios from "../../hooks/useAxios";
->>>>>>> test
 
 const Container = styled.div`
   display: flex;
@@ -32,19 +24,22 @@ const Container = styled.div`
   font-size: 1.5rem;
 
   .links {
-    a,
+    button,
     .link {
+      font-family: inherit;
       display: flex;
       justify-content: center;
       color: #ec3944;
-      text-decoration: none;
+      background: none;
       font-size: 2rem;
       cursor: pointer;
       border: thin solid #ec3944;
-      padding: 0.25rem 0.5rem;
-      margin: 0 12rem;
+      padding: 0.3rem 0.7rem;
+      margin: 0 14rem;
+      margin-top: 5%;
       border-radius: 0.5rem;
       transition: 0.125s ease-in-out all;
+      text-decoration: none;
       &:hover {
         transition: 0.125s ease-in-out all;
         color: #2f2b4a;
@@ -111,7 +106,11 @@ function Login() {
             ></Input>
           </Label>
           <div className="links">
-            <NavLink to="/login">Login</NavLink>
+            <NavLink to="/login" style={{ textDecoration: "none" }}>
+              <button name="button" type="submit">
+                Login
+              </button>
+            </NavLink>
           </div>
         </form>
       </Container>
