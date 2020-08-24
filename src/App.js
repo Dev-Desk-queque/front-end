@@ -7,6 +7,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import { useDispatch, useSelector } from "react-redux";
 import useAxios from "./hooks/useAxios";
 import { getIssues } from "./actions";
+import Dashboard from "./components/dashboard";
 
 const Container = styled.div`
   display: flex;
@@ -59,8 +60,13 @@ function App() {
             </Route>
 
             {/* Ut Oh... Gotta be logged in for this one... */}
-            <PrivateRoute path="/dashboard" redirectPath="/test">
-              <h2>You may have a token, but NO SOUP FOR YOU!</h2>
+            <PrivateRoute path="/dashboard" redirectPath="/login">
+              <Dashboard />
+            </PrivateRoute>
+
+            {/* Route to create a new issue */}
+            <PrivateRoute path="/create-issue" redirectPath="/login">
+              <h2>Create an issue</h2>
             </PrivateRoute>
 
             {/* Here is where people will land when they first get here! */}

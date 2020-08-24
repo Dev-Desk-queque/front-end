@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link, useHistory } from "react-router-dom";
 import useAxios from "../../hooks/useAxios";
 
 const Container = styled.nav`
@@ -20,6 +20,9 @@ const Container = styled.nav`
     font-size: 2.5rem;
   }
   .links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     a,
     .link {
       color: #ec3944;
@@ -30,6 +33,7 @@ const Container = styled.nav`
       padding: 0.25rem 0.5rem;
       border-radius: 0.5rem;
       transition: 0.125s ease-in-out all;
+      margin-left: 0.5rem;
       &:hover {
         transition: 0.125s ease-in-out all;
         color: #2f2b4a;
@@ -41,7 +45,7 @@ const Container = styled.nav`
 `;
 
 export default (props) => {
-  const { token, logUserOut } = useAxios("")
+  const { token, logUserOut } = useAxios("");
 
   function handleLogout(e) {
     e.preventDefault();
@@ -56,6 +60,9 @@ export default (props) => {
             <h1>DeskOverflow</h1>
           </div>
           <div className="links">
+            <DynamicLink to="/create-issue" back="/dashboard">
+              New Issue
+            </DynamicLink>
             <div className="link" onClick={handleLogout}>
               Logout
             </div>
@@ -74,3 +81,20 @@ export default (props) => {
     </>
   );
 };
+
+function DynamicLink(props) {
+  const { pathname } = useHistory().location;
+  const { to } = props;
+
+  console.log(pathname, to);
+
+  return (
+    <React.Fragment>
+      {pathname !== to ? (
+        <Link {...props} />
+      ) : (
+        <Link to={props.back}>Back</Link>
+      )}
+    </React.Fragment>
+  );
+}

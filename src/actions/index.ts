@@ -1,4 +1,6 @@
 import { AxiosInstance } from "axios";
+import { v4 as uuid } from "uuid";
+import { iIssue } from "../reducer";
 
 export enum types {
   SET_NETWORK_LOADING = "SET_NETWORK_LOADING",
@@ -40,9 +42,12 @@ export const getIssues = (axios: AxiosInstance) => (dispatch: Function) => {
   axios
     .get("/api/devdesk/questions")
     .then((res) => {
+      const issues = res.data.map((issue: iIssue) => {
+        return { ...issue, key: uuid() };
+      });
       returnAction(types.SET_NETWORK_LOADING, false, dispatch);
       returnAction(types.SET_NETWORK_ERROR, "", dispatch);
-      returnAction(types.SET_ISSUES, res.data, dispatch);
+      returnAction(types.SET_ISSUES, issues, dispatch);
     })
     .catch((err) => {
       returnAction(types.SET_NETWORK_LOADING, false, dispatch);
