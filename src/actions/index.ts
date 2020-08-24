@@ -1,5 +1,6 @@
 import { AxiosInstance } from "axios";
 import { questions } from "../dummyData";
+import { BASE_URL } from "../utils/constants";
 
 export enum types {
   SET_NETWORK_LOADING = "SET_NETWORK_LOADING",
