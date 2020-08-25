@@ -4,9 +4,13 @@ import {
   Switch,
   Route,
   NavLink,
+  useHistory,
 } from "react-router-dom";
 import styled from "styled-components";
 import useAxios from "../../hooks/useAxios";
+import useForm from "../../hooks/useForm";
+import { useDispatch } from "react-redux";
+import { logUserIn } from "../../actions";
 
 const Container = styled.div`
   display: flex;
@@ -65,33 +69,42 @@ const Input = styled.input`
 
 function Login() {
   const { axiosWithAuth: axios } = useAxios();
-  const { defaultForm, setDefaultForm } = {
+  const dispatch = useDispatch();
+  const defaultForm = {
     username: "",
     password: "",
   };
-  const { formState, setFormState } = useState(defaultForm);
-
-  const handleChanges = (event) => {
-    console.log(event);
-  };
+  const [formValues, handleChanges] = useForm(defaultForm);
+  const { push } = useHistory();
 
   const submitForm = (event) => {
+    event.preventDefault();
     console.log(event);
+    dispatch(
+      logUserIn({
+        axios,
+        username: formValues.username,
+        password: formValues.password,
+        callback: () => {
+          push("/dashboard");
+        },
+      })
+    );
   };
 
   return (
     <div>
       <Container>
         <h1>Login</h1>
-        <form>
+        <form onSubmit={submitForm}>
           <Label htmlFor="userName">
             Username
             <Input
               type="text"
               name="username"
-              placehokder="Enter username"
-              // value={formState.username}
-              // onChange={}
+              placeholder="Enter username"
+              value={formValues.username}
+              onChange={handleChanges}
             ></Input>
           </Label>
           <br />
@@ -100,17 +113,15 @@ function Login() {
             <Input
               type="password"
               name="password"
-              placehokder="Enter password"
-              // value={formState.password}
-              // onChange={}
+              placeholder="Enter password"
+              value={formValues.password}
+              onChange={handleChanges}
             ></Input>
           </Label>
           <div className="links">
-            <NavLink to="/login" style={{ textDecoration: "none" }}>
-              <button name="button" type="submit">
-                Login
-              </button>
-            </NavLink>
+            <button type="submit" className="link">
+              Login
+            </button>
           </div>
         </form>
       </Container>

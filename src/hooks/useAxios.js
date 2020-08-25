@@ -6,7 +6,7 @@ import { BASE_URL } from "../utils/constants";
 function useAxios() {
   let axiosWithAuth;
   const dispatch = useDispatch();
-  const token = useSelector((state) => state.token);
+  const token = useSelector((state) => state.user.token);
 
   if (token) {
     axiosWithAuth = axios.create({
