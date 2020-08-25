@@ -2,8 +2,8 @@
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Navbar from "./components/navbar";
-import Login from "./components/forms/Login";
-import Register from "./components/forms/Register";
+import Login from "./components/auth/Login";
+import Register from "./components/auth/Register";
 import styled, { keyframes } from "styled-components";
 import PrivateRoute from "./components/PrivateRoute";
 import { useDispatch, useSelector } from "react-redux";

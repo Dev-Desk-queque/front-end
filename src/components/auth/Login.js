@@ -1,11 +1,5 @@
-import React, { useState } from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  NavLink,
-  useHistory,
-} from "react-router-dom";
+import React from "react";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import useAxios from "../../hooks/useAxios";
 import useForm from "../../hooks/useForm";
@@ -28,6 +22,7 @@ const Container = styled.div`
   font-size: 1.5rem;
 
   .links {
+    
     button,
     .link {
       font-family: inherit;

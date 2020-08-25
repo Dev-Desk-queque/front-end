@@ -96,7 +96,7 @@ export const logUserIn = (options: {
       returnAction(types.SET_NETWORK_LOADING, false, dispatch);
       dispatchMessage(
         messageTypes.ERROR,
-        `${err.message}: ${err.response.data.message}`,
+        `${err.message}: ${err.response && err.response.data.message}`,
         dispatch
       );
     });
@@ -161,8 +161,10 @@ export const getIssues = (axios: AxiosInstance) => (dispatch: Function) => {
   axios
     .get("/api/devdesk/questions")
     .then((res) => {
-      const issues = res.data.map((issue: iIssue) => {
-        return { ...issue, key: uuid() };
+      const issues = res.data.filter((issue: iIssue) => {
+        if (issue.topic !== null && issue.question !== null) {
+          return { ...issue, key: uuid() };
+        } else return null;
       });
       returnAction(types.SET_NETWORK_LOADING, false, dispatch);
       dispatchMessage(messageTypes.INFORMATION, "Loading Complete", dispatch);
@@ -207,7 +209,7 @@ export const submitNewIssue = (
       returnAction(types.SET_NETWORK_LOADING, false, dispatch);
       dispatchMessage(
         messageTypes.ERROR,
-        `${err.message}: ${err.response.data.message}`,
+        `${err.message}: ${err.response && err.response.data.message}`,
         dispatch
       );
     });
