@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import useAxios from "../../../hooks/useAxios";
 import { deleteIssue, getIssues } from "../../../actions";
 
@@ -17,6 +18,14 @@ const Container = styled.section`
   padding: 1rem 2rem;
   margin: 1rem;
   border-radius: 2rem;
+  &.deleting {
+    box-shadow: none;
+    filter: opacity(0.5);
+  }
+  &:hover {
+    box-shadow: 0.325rem 0.325rem 0.75rem 0rem #2f2b4a;
+    cursor: pointer;
+  }
   .title {
     grid-column: 1 / 3;
     text-align: center;
@@ -48,17 +57,24 @@ export default function Issue({ issue, isMyIssue, ...props }) {
   const { axiosWithAuth: axios } = useAxios();
   const dispatch = useDispatch();
   const [buttonEnabled, setButtonEnabled] = useState(true);
+  const { push: reroute } = useHistory();
 
   function handleDelete(e) {
     e.preventDefault();
+    e.stopPropagation();
     setButtonEnabled(false);
     dispatch(
       deleteIssue({ axios, issue, callback: () => dispatch(getIssues(axios)) })
     );
   }
 
+  function handleClick(e) {
+    e.preventDefault();
+    reroute(`/dashboard/question/${issue.id}`);
+  }
+
   return (
-    <Container className="issue">
+    <Container onClick={handleClick} className={!buttonEnabled && "deleting"}>
       <div className="title">
         <h5>{issue.topic.toUpperCase()}</h5>
       </div>

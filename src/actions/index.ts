@@ -203,7 +203,7 @@ export const submitNewIssue = (options: {
     question_user_id: user.id,
   };
   axios
-    .post("/api/devdesk/questions", newIssue)
+    .post("/api/devdesk/protected/questions", newIssue)
     .then((res) => {
       returnAction(types.SET_NETWORK_LOADING, false, dispatch);
       dispatchMessage(
@@ -237,7 +237,7 @@ export const deleteIssue = (options: {
   }
   returnAction(types.SET_NETWORK_LOADING, true, dispatch);
   axios
-    .delete(`/api/devdesk/question/${issue.id}`)
+    .delete(`/api/devdesk/protected/question/${issue.id}`)
     .then((res) => {
       returnAction(types.SET_NETWORK_LOADING, false, dispatch);
       dispatchMessage(messageTypes.INFORMATION, "Question deleted", dispatch);

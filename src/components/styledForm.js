@@ -8,7 +8,6 @@ export default styled.div`
   background: #2f2b4a;
   color: #ec3944;
   min-width: 40rem;
-  margin-top: 10rem;
   border-radius: 2rem;
   box-shadow: 0.125rem 0.125rem 0.5rem 0rem black;
   .header {

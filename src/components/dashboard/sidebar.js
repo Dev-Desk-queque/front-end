@@ -13,12 +13,10 @@ const Container = styled.div`
   box-shadow: 0rem 0rem 0.25rem 0rem black;
   overflow-y: scroll;
   section.issues {
-    background: grey;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 20rem;
   }
 `;
 
