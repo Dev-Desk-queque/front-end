@@ -1,6 +1,10 @@
 import { iAction, types, messageTypes } from "../actions";
 import decode from "jwt-decode";
 
+export type iAnswer = {
+
+}
+
 export type iIssue = {
   topic?: string;
   question?: string;
@@ -10,6 +14,7 @@ export type iIssue = {
   code_language?: string | null;
   question_user_id?: number;
   key?: string;
+  answer?: iAnswer
 };
 
 export type iSystemMessage = {
