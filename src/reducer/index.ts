@@ -22,11 +22,14 @@ const tryGetUser = () => {
   let toReturn = {
     username: null as null | string,
     token: null as null | string,
+    id: null as null | number,
   };
   try {
-    const token = localStorage.getItem("token");
+    const token = JSON.parse(localStorage.getItem("token") as string);
+    const obj = decode(token as string) as any;
     toReturn.token = token;
-    toReturn.username = token && (decode(token) as any).username;
+    toReturn.username = token && obj.username;
+    toReturn.id = token && obj.subject;
   } catch (err) {}
   return toReturn;
 };
@@ -48,7 +51,7 @@ export default function reducer(state = initialState, action: iAction): iState {
 
     case types.SET_USER:
       try {
-        localStorage.setItem("token", JSON.stringify(action.payload));
+        localStorage.setItem("token", JSON.stringify(action.payload.token));
       } finally {
         return { ...state, user: action.payload };
       }
@@ -57,7 +60,7 @@ export default function reducer(state = initialState, action: iAction): iState {
       try {
         localStorage.removeItem("token");
       } finally {
-        return { ...state, user: { username: null, token: null } };
+        return { ...state, user: { username: null, token: null, id: null } };
       }
 
     case types.SET_ISSUES:

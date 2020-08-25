@@ -72,11 +72,11 @@ export const logUserIn = (options: {
   axios
     .post("/api/devdesk/auth/login", { username, password })
     .then((res) => {
-      const tokenUsername = (decode(res.data.token) as any).username;
+      const userObj = decode(res.data.token) as any;
       returnAction(types.SET_NETWORK_LOADING, false, dispatch);
       returnAction(
         types.SET_USER,
-        { token: res.data.token, username: tokenUsername },
+        { token: res.data.token, username: userObj.username, id: userObj.subject },
         dispatch
       );
       dispatchMessage(
