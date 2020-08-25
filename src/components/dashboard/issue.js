@@ -1,5 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import useAxios from "../../hooks/useAxios";
+import { deleteIssue, getIssues } from "../../actions";
 
 const Container = styled.section`
   display: grid;
@@ -42,7 +45,18 @@ const Container = styled.section`
 `;
 
 export default function Issue({ issue, isMyIssue, ...props }) {
-  console.log(isMyIssue);
+  const { axiosWithAuth: axios } = useAxios();
+  const dispatch = useDispatch();
+  const [buttonEnabled, setButtonEnabled] = useState(true);
+
+  function handleDelete(e) {
+    e.preventDefault();
+    setButtonEnabled(false);
+    dispatch(
+      deleteIssue({ axios, issue, callback: () => dispatch(getIssues(axios)) })
+    );
+  }
+
   return (
     <Container className="issue">
       <div className="title">
@@ -53,7 +67,11 @@ export default function Issue({ issue, isMyIssue, ...props }) {
       <p className="content">{issue.question}</p>
       <h3 className="topic">My Attempt:</h3>
       <p className="content">{issue.what_I_tried}</p>
-      {isMyIssue && <button>Delete</button>}
+      {isMyIssue && (
+        <button onClick={handleDelete} disabled={!buttonEnabled}>
+          Delete
+        </button>
+      )}
     </Container>
   );
 }

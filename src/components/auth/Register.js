@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import useAxios from "../../hooks/useAxios";
 import * as yup from "yup";
+import { useDispatch } from "react-redux";
+import { registerUser } from "../../actions";
+import { useHistory } from "react-router-dom";
 
 const formSchema = yup.object().shape({
   username: yup
@@ -13,6 +16,8 @@ const formSchema = yup.object().shape({
 });
 
 function Register() {
+  const dispatch = useDispatch();
+  const { push: reroute } = useHistory();
   const { axiosWithAuth: axios } = useAxios();
   const [defaultRegForm, setDefaultRegForm] = useState({
     username: "",
@@ -58,7 +63,18 @@ function Register() {
   };
 
   const submitForm = (event) => {
+    event.preventDefault();
     console.log("form submitted!");
+    dispatch(
+      registerUser({
+        axios,
+        password: regFormState.password,
+        username: regFormState.username,
+        callback: () => {
+          reroute("/dashboard");
+        },
+      })
+    );
   };
 
   return (

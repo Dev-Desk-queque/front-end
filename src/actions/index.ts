@@ -126,11 +126,15 @@ export const registerUser = (options: {
       axios
         .post("/api/devdesk/auth/login", { username, password })
         .then((res) => {
-          const username = (decode(res.data.token) as any).username;
+          const decoded = decode(res.data.token) as any;
           returnAction(types.SET_NETWORK_LOADING, false, dispatch);
           returnAction(
             types.SET_USER,
-            { token: res.data.token, username },
+            {
+              token: res.data.token,
+              username: decoded.username,
+              id: decoded.subject,
+            },
             dispatch
           );
           dispatchMessage(
@@ -196,7 +200,7 @@ export const submitNewIssue = (
     question_user_id: user.id,
   };
   axios
-    .post(`/api/devdesk/questions/${user.id}`, newIssue)
+    .post("/api/devdesk/questions", newIssue)
     .then((res) => {
       returnAction(types.SET_NETWORK_LOADING, false, dispatch);
       dispatchMessage(
@@ -214,6 +218,38 @@ export const submitNewIssue = (
       dispatchMessage(
         messageTypes.ERROR,
         `${err.message}: ${err.response && err.response.data.message}`,
+        dispatch
+      );
+    });
+};
+
+export const deleteIssue = (options: {
+  axios: AxiosInstance;
+  issue: iIssue;
+  callback?: Function;
+}) => (dispatch: Function) => {
+  const { axios, issue, callback } = options;
+  if (!axios) {
+    throw axiosError;
+  }
+  returnAction(types.SET_NETWORK_LOADING, true, dispatch);
+  axios
+    .delete(`/api/devdesk/question/${issue.id}`)
+    .then((res) => {
+      returnAction(types.SET_NETWORK_LOADING, false, dispatch);
+      dispatchMessage(messageTypes.INFORMATION, "Question deleted", dispatch);
+      if (callback) {
+        console.log("calling callback");
+        callback();
+      }
+    })
+    .catch((err) => {
+      returnAction(types.SET_NETWORK_LOADING, false, dispatch);
+      dispatchMessage(
+        messageTypes.ERROR,
+        `${err.message} ${
+          err.response && err.response.message && err.response.message
+        }`,
         dispatch
       );
     });

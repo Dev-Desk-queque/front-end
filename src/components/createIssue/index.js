@@ -5,6 +5,7 @@ import { submitNewIssue } from "../../actions";
 import useAxios from "../../hooks/useAxios";
 import * as yup from "yup";
 import useForm from "../../hooks/useForm";
+import StyledForm from "../styledForm";
 
 const Container = styled.div`
   display: flex;
@@ -89,37 +90,41 @@ export default function CreateIssue(props) {
   }
 
   return (
-    <Container>
-      <form onSubmit={handleSubmit}>
-        <div className="title">
+    <StyledForm>
+      <div className="header">
+        <div className="button active">
           <h2>Create a new issue</h2>
         </div>
-        <label htmlFor="topic">Topic:</label>
-        <input
-          name="topic"
-          id="topic"
-          type="text"
-          value={formValues.topic}
-          onChange={onFormChange}
-        />
-        <label htmlFor="question">Question:</label>
-        <textarea
-          type="text"
-          id="question"
-          name="question"
-          value={formValues.question}
-          onChange={onFormChange}
-        />
-        <label htmlFor="what_I_tried">What I Tried:</label>
-        <textarea
-          type="text"
-          id="what_I_tried"
-          name="what_I_tried"
-          value={formValues.what_I_tried}
-          onChange={onFormChange}
-        />
-        <button>Submit</button>
-      </form>
-    </Container>
+      </div>
+      <div className="content">
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="topic">Topic:</label>
+          <input
+            name="topic"
+            id="topic"
+            type="text"
+            value={formValues.topic}
+            onChange={onFormChange}
+          />
+          <label htmlFor="question">Question:</label>
+          <textarea
+            type="text"
+            id="question"
+            name="question"
+            value={formValues.question}
+            onChange={onFormChange}
+          />
+          <label htmlFor="what_I_tried">What I Tried:</label>
+          <textarea
+            type="text"
+            id="what_I_tried"
+            name="what_I_tried"
+            value={formValues.what_I_tried}
+            onChange={onFormChange}
+          />
+          <button>Submit</button>
+        </form>
+      </div>
+    </StyledForm>
   );
 }
