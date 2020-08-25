@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { NavLink, Link, useHistory } from "react-router-dom";
+import DynamicLink from '../DynamicLink';
 import useAxios from "../../hooks/useAxios";
 
 const Container = styled.nav`
@@ -60,7 +60,11 @@ export default (props) => {
             <h1>DeskOverflow</h1>
           </div>
           <div className="links">
-            <DynamicLink to="/create-issue" back="/dashboard">
+            <DynamicLink
+              to="/create-issue"
+              back="/dashboard"
+              backText="Dashboard"
+            >
               New Issue
             </DynamicLink>
             <div className="link" onClick={handleLogout}>
@@ -74,27 +78,16 @@ export default (props) => {
             <h1>DeskOverflow</h1>
           </div>
           <div className="links">
-            <NavLink to="/login">Login</NavLink>
+            <DynamicLink
+              to="/login"
+              back="/"
+              backText="Home"
+            >
+              Login
+            </DynamicLink>
           </div>
         </Container>
       )}
     </>
   );
 };
-
-function DynamicLink(props) {
-  const { pathname } = useHistory().location;
-  const { to } = props;
-
-  console.log(pathname, to);
-
-  return (
-    <React.Fragment>
-      {pathname !== to ? (
-        <Link {...props} />
-      ) : (
-        <Link to={props.back}>Back</Link>
-      )}
-    </React.Fragment>
-  );
-}

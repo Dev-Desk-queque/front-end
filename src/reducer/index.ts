@@ -1,14 +1,14 @@
 import { iAction, types } from "../actions";
 
 export type iIssue = {
-  topic: string;
-  question: string;
-  id: number;
-  is_resolved: boolean;
-  what_I_tried: string | null;
-  code_language: string | null;
-  question_user_id: number;
-  key: string
+  topic?: string;
+  question?: string;
+  id?: number;
+  is_resolved?: boolean;
+  what_I_tried?: string | null;
+  code_language?: string | null;
+  question_user_id?: number;
+  key?: string
 };
 
 const tryGetToken = () => {

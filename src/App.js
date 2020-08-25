@@ -2,12 +2,24 @@
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Navbar from "./components/navbar";
-import styled from "styled-components";
+import Login from "./components/forms/Login";
+import Register from "./components/forms/Register";
+import styled, {keyframes} from "styled-components";
 import PrivateRoute from "./components/PrivateRoute";
 import { useDispatch, useSelector } from "react-redux";
 import useAxios from "./hooks/useAxios";
 import { getIssues } from "./actions";
 import Dashboard from "./components/dashboard";
+import CreateIssue from "./components/createIssue";
+
+const errorKeyframe = keyframes`
+  from {
+    transform: translate(100vw, 0%);
+  }
+  to {
+    transform: translate(0%, 0%);
+  }
+`
 
 const Container = styled.div`
   display: flex;
@@ -19,10 +31,12 @@ const Container = styled.div`
     background: #ec3944;
     color: #2f2b4a;
     padding: 1rem 2rem;
-    width: 100%;
+    width: auto;
     display: flex;
     justify-content: center;
     align-items: center;
+    animation: ${errorKeyframe} .25s ease-out forwards;
+    z-index: -1;
     p {
       font-size: 1.5rem;
       font-weight: bolder;
@@ -56,7 +70,7 @@ function App() {
           {/* Insert all routes between this switch statement */}
           <Switch>
             <Route path="/login">
-              <h2>NO LOGIN FOR YOU!</h2>
+              <Login />
             </Route>
 
             {/* Ut Oh... Gotta be logged in for this one... */}
@@ -66,7 +80,7 @@ function App() {
 
             {/* Route to create a new issue */}
             <PrivateRoute path="/create-issue" redirectPath="/login">
-              <h2>Create an issue</h2>
+              <CreateIssue />
             </PrivateRoute>
 
             {/* Here is where people will land when they first get here! */}
