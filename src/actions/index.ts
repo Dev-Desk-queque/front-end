@@ -76,7 +76,11 @@ export const logUserIn = (options: {
       returnAction(types.SET_NETWORK_LOADING, false, dispatch);
       returnAction(
         types.SET_USER,
-        { token: res.data.token, username: userObj.username, id: userObj.subject },
+        {
+          token: res.data.token,
+          username: userObj.username,
+          id: userObj.subject,
+        },
         dispatch
       );
       dispatchMessage(
@@ -170,17 +174,33 @@ export const getIssues = (axios: AxiosInstance) => (dispatch: Function) => {
     });
 };
 
-export const submitNewIssue = (axios: AxiosInstance, issue: iAction) => (
-  dispatch: Function
-) => {
+export const submitNewIssue = (
+  axios: AxiosInstance,
+  issue: iAction,
+  callback?: Function
+) => (dispatch: Function, getState: Function) => {
   if (!axios) {
     throw axiosError;
   }
+  const { user } = getState();
   returnAction(types.SET_NETWORK_LOADING, true, dispatch);
+  const newIssue: iIssue = {
+    ...issue,
+    code_language: "Java",
+    question_user_id: user.id,
+  };
   axios
-    .post("/api/devdesk/questions/1", issue)
+    .post(`/api/devdesk/questions/${user.id}`, newIssue)
     .then((res) => {
       returnAction(types.SET_NETWORK_LOADING, false, dispatch);
+      dispatchMessage(
+        messageTypes.INFORMATION,
+        "Question created successfully",
+        dispatch
+      );
+      if (callback) {
+        callback();
+      }
     })
     .catch((err) => {
       console.log(err.response);
