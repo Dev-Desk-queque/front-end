@@ -8,9 +8,12 @@ export default function useForm(initialFormValues) {
    * @summary Sets the formValues state using an event object only
    */
   function onChange(e) {
-    e.preventDefault();
-    const { name, value } = e.target;
-    setFormValues({ ...formValues, [name]: value });
+    const { name, value, type, checked } = e.target;
+    if (type === "checkbox") {
+      setFormValues({ ...formValues, [name]: checked });
+    } else {
+      setFormValues({ ...formValues, [name]: value });
+    }
   }
 
   return [formValues, onChange];
