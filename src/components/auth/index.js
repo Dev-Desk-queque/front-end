@@ -12,7 +12,7 @@ const Container = styled.div`
   align-items: center;
   background: #2f2b4a;
   color: #ec3944;
-  min-width: 30rem;
+  min-width: 40rem;
   margin-top: 10rem;
   border-radius: 2rem;
   box-shadow: 0.125rem 0.125rem 0.5rem 0rem black;
@@ -73,6 +73,7 @@ const Container = styled.div`
       label {
         grid-column: 1 / 2;
         font-size: 1.5rem;
+        flex-wrap: wrap;
       }
       input {
         grid-column: 2 / 3;

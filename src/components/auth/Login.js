@@ -1,6 +1,5 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import styled from "styled-components";
 import useAxios from "../../hooks/useAxios";
 import useForm from "../../hooks/useForm";
 import { useDispatch } from "react-redux";

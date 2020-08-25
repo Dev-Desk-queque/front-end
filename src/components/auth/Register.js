@@ -1,14 +1,6 @@
 import React, { useState } from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  NavLink,
-} from "react-router-dom";
-import styled from "styled-components";
 import useAxios from "../../hooks/useAxios";
 import * as yup from "yup";
-import { validate } from "uuid";
 
 const formSchema = yup.object().shape({
   username: yup
