@@ -76,6 +76,9 @@ export default styled.div`
         width: 40rem;
         height: 10rem;
         resize: none;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        border: none;
       }
       input {
         grid-column: 2 / 3;

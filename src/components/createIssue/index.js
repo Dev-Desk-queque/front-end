@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
-import { submitNewIssue } from "../../actions";
+import { useHistory } from "react-router-dom";
+import { submitNewIssue, getIssues } from "../../actions";
 import useAxios from "../../hooks/useAxios";
 import * as yup from "yup";
 import useForm from "../../hooks/useForm";
@@ -80,13 +81,23 @@ const initialFormErrors = initialFormValues;
 
 export default function CreateIssue(props) {
   const [formValues, onFormChange] = useForm(initialFormValues);
+  const { push: reroute } = useHistory();
 
   const dispatch = useDispatch();
   const { axiosWithAuth: axios } = useAxios();
 
   function handleSubmit(e) {
     e.preventDefault();
-    dispatch(submitNewIssue(axios, formValues));
+    dispatch(
+      submitNewIssue({
+        axios,
+        issue: formValues,
+        callback: () => {
+          reroute("/dashboard");
+          dispatch(getIssues(axios));
+        },
+      })
+    );
   }
 
   return (

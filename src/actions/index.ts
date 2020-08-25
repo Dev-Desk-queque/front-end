@@ -104,6 +104,7 @@ export const logUserIn = (options: {
 
 export const logUserOut = () => (dispatch: Function) => {
   returnAction(types.SET_USER_LOGOUT, null, dispatch);
+  returnAction(types.SET_ISSUES, [], dispatch);
 };
 
 export const registerUser = (options: {
@@ -175,7 +176,6 @@ export const getIssues = (axios: AxiosInstance) => (dispatch: Function) => {
           return { ...issue, key: uuid() };
         });
       returnAction(types.SET_NETWORK_LOADING, false, dispatch);
-      dispatchMessage(messageTypes.INFORMATION, "Loading Complete", dispatch);
       returnAction(types.SET_ISSUES, issues, dispatch);
     })
     .catch((err) => {
@@ -184,11 +184,14 @@ export const getIssues = (axios: AxiosInstance) => (dispatch: Function) => {
     });
 };
 
-export const submitNewIssue = (
-  axios: AxiosInstance,
-  issue: iAction,
-  callback?: Function
-) => (dispatch: Function, getState: Function) => {
+export const submitNewIssue = (options: {
+  axios: AxiosInstance;
+  issue: iIssue;
+  callback?: Function;
+}) => (dispatch: Function, getState: Function) => {
+
+  const { axios, issue, callback } = options;
+
   if (!axios) {
     throw axiosError;
   }
