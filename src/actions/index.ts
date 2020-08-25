@@ -170,7 +170,6 @@ export const getIssues = (axios: AxiosInstance) => (dispatch: Function) => {
         .map((issue: iIssue) => {
           return { ...issue, key: uuid() };
         });
-      console.log(issues);
       returnAction(types.SET_NETWORK_LOADING, false, dispatch);
       dispatchMessage(messageTypes.INFORMATION, "Loading Complete", dispatch);
       returnAction(types.SET_ISSUES, issues, dispatch);
