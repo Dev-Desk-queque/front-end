@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { NavLink, Link, useLocation } from "react-router-dom";
 import DynamicLink from '../DynamicLink';
 import useAxios from "../../hooks/useAxios";
 
