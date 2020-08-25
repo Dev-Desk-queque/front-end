@@ -2,8 +2,6 @@
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Navbar from "./components/navbar";
-import Login from "./components/auth/Login";
-import Register from "./components/auth/Register";
 import styled, { keyframes } from "styled-components";
 import PrivateRoute from "./components/PrivateRoute";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,6 +9,7 @@ import useAxios from "./hooks/useAxios";
 import { getIssues } from "./actions";
 import Dashboard from "./components/dashboard";
 import CreateIssue from "./components/createIssue";
+import Auth from "./components/auth";
 
 const errorKeyframe = keyframes`
   from {
@@ -45,7 +44,7 @@ const Messages = styled.section`
   .error,
   .inform,
   .warn {
-    filter: opacity(.825);
+    filter: opacity(0.825);
     padding: 1rem 2rem;
     width: max-content;
     display: flex;
@@ -110,7 +109,7 @@ function App() {
           {/* Insert all routes between this switch statement */}
           <Switch>
             <Route path="/login">
-              <Login />
+              <Auth />
             </Route>
 
             {/* Ut Oh... Gotta be logged in for this one... */}

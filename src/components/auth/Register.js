@@ -20,61 +20,6 @@ const formSchema = yup.object().shape({
   helper: yup.boolean().oneOf([false]),
 });
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 8rem;
-  height: 50rem;
-  width: 40rem;
-  padding-top: 10rem;
-  background: #2f2b4a;
-  color: #ec3944;
-  border-radius: 5%;
-  box-shadow: 3px 4px 8px 0px rgba(0, 0, 0, 0.5);
-  transition: 0.3s;
-  font-size: 1.5rem;
-
-  .links {
-    button,
-    .link {
-      font-family: inherit;
-      display: flex;
-      justify-content: center;
-      color: #ec3944;
-      background: none;
-      font-size: 2rem;
-      cursor: pointer;
-      border: thin solid #ec3944;
-      padding: 0.3rem 0.7rem;
-      margin: 0 14rem;
-      margin-top: 5%;
-      border-radius: 0.5rem;
-      transition: 0.125s ease-in-out all;
-      text-decoration: none;
-      &:hover {
-        transition: 0.125s ease-in-out all;
-        color: #2f2b4a;
-        background: #ec3944;
-        border: thin solid #ec3944;
-      }
-    }
-  }
-`;
-
-const Label = styled.label`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 2%;
-  padding-right: 8%;
-  font-size: 1.8rem;
-`;
-
-const Input = styled.input`
-  margin: 2%;
-`;
-
 function Register() {
   const { axiosWithAuth: axios } = useAxios();
   const [defaultRegForm, setDefaultRegForm] = useState({
@@ -125,61 +70,49 @@ function Register() {
   };
 
   return (
-    <div>
-      <Container>
-        <h1>Register</h1>
-        <form onSubmit={submitForm}>
-          <Label htmlFor="userName">
-            Username
-            <Input
-              type="text"
-              name="username"
-              placehokder="Enter username"
-              value={regFormState.username}
-              onChange={handleChanges}
-            ></Input>
-          </Label>
-          <br />
-          <Label htmlFor="password">
-            Password
-            <Input
-              type="password"
-              name="password"
-              placehokder="Enter password"
-              value={regFormState.password}
-              onChange={handleChanges}
-            ></Input>
-          </Label>
-          <br />
-          <Label htmlFor="student">
-            Are you a student?
-            <Input
-              type="checkbox"
-              name="student"
-              value={regFormState.student}
-              onChange={handleChanges}
-            ></Input>
-          </Label>
-          <br />
-          <Label htmlFor="student">
-            Are you a helper?
-            <Input
-              type="checkbox"
-              name="helper"
-              value={regFormState.helper}
-              onChange={handleChanges}
-            ></Input>
-          </Label>
-          <div className="links">
-            <NavLink to="/login" style={{ textDecoration: "none" }}>
-              <button name="button" type="submit">
-                Create Account
-              </button>
-            </NavLink>
-          </div>
-        </form>
-      </Container>
-    </div>
+    <form onSubmit={submitForm}>
+      <label htmlFor="userName">Username</label>
+      <input
+        type="text"
+        name="username"
+        placeholder="Enter username"
+        value={regFormState.username}
+        onChange={handleChanges}
+      />
+      <label htmlFor="password">Password</label>
+      <input
+        type="password"
+        name="password"
+        placeholder="Enter password"
+        value={regFormState.password}
+        onChange={handleChanges}
+      />
+      <label htmlFor="student">Are you a student?</label>
+      <div className="checkbox">
+        <input
+          type="checkbox"
+          name="student"
+          value={regFormState.student}
+          onChange={handleChanges}
+        />
+        <span className={`${regFormState.student === true ? "checked" : ""}`} />
+      </div>
+
+      <label htmlFor="student">Are you a helper?</label>
+      <div className="checkbox">
+        <input
+          type="checkbox"
+          name="helper"
+          value={regFormState.helper}
+          onChange={handleChanges}
+        />
+        <span className={`${regFormState.helper === true ? "checked" : ""}`} />
+      </div>
+
+      <button name="button" type="submit">
+        Create Account
+      </button>
+    </form>
   );
 }
 
