@@ -17,11 +17,16 @@ import CreateIssue from "./components/createIssue";
 import Auth from "./components/auth";
 
 const errorKeyframe = keyframes`
-  from {
+  0% {
     transform: translate(100vw, 0%);
+    filter: opacity(1);
   }
-  to {
+  10% {
     transform: translate(0%, 0%);
+    filter: opacity(1);
+  }
+  100% {
+    filter: opacity(0);
   }
 `;
 
@@ -55,7 +60,7 @@ const Messages = styled.section`
     display: flex;
     justify-content: center;
     align-items: center;
-    animation: ${errorKeyframe} 0.25s ease-out forwards;
+    animation: ${errorKeyframe} 4s ease-out forwards;
     z-index: -1;
     p {
       font-size: 1.5rem;

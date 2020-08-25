@@ -53,7 +53,7 @@ function dispatchMessage(
   returnAction(types.ADD_NEW_MESSAGE, message, dispatch);
   setTimeout(() => {
     returnAction(types.REMOVE_MESSAGE, message, dispatch);
-  }, 3500);
+  }, 4000);
 }
 
 /* Action Dispatchers */
