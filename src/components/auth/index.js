@@ -27,6 +27,7 @@ const Container = styled.div`
       &:last-child {
         border-top-right-radius: 2rem;
       }
+      transition: .125s ease-in-out all;
       width: 100%;
       display: flex;
       justify-content: center;

@@ -161,11 +161,16 @@ export const getIssues = (axios: AxiosInstance) => (dispatch: Function) => {
   axios
     .get("/api/devdesk/questions")
     .then((res) => {
-      const issues = res.data.filter((issue: iIssue) => {
-        if (issue.topic !== null && issue.question !== null) {
+      const issues = res.data
+        .filter((issue: iIssue) => {
+          if (issue.topic !== null && issue.question !== null) {
+            return issue;
+          } else return null;
+        })
+        .map((issue: iIssue) => {
           return { ...issue, key: uuid() };
-        } else return null;
-      });
+        });
+      console.log(issues);
       returnAction(types.SET_NETWORK_LOADING, false, dispatch);
       dispatchMessage(messageTypes.INFORMATION, "Loading Complete", dispatch);
       returnAction(types.SET_ISSUES, issues, dispatch);

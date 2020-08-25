@@ -53,6 +53,7 @@ export default function Issues(props) {
     <Container>
       {issues.length > 0 ? (
         issues.map((issue) => {
+          console.log(issue.key);
           return (
             <div className="issue" key={issue.key}>
               <div className="title">
