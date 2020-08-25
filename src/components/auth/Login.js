@@ -1,28 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import useAxios from "../../hooks/useAxios";
-import useForm from "../../hooks/useForm";
 import { useDispatch } from "react-redux";
 import { logUserIn } from "../../actions";
+import { yupResolver } from "@hookform/resolvers";
+import * as yup from "yup";
+import { register } from "../../serviceWorker";
+import { useForm } from "react-hook-form";
+import schema from "./formSchema";
 
 function Login() {
   const { axiosWithAuth: axios } = useAxios();
   const dispatch = useDispatch();
-  const defaultForm = {
-    username: "",
-    password: "",
-  };
-  const [formValues, handleChanges] = useForm(defaultForm);
+  const { register, handleSubmit, errors } = useForm({
+    resolver: yupResolver(schema),
+  });
+
   const { push } = useHistory();
 
-  const submitForm = (event) => {
-    event.preventDefault();
-    console.log(event);
+  const onSubmit = (data) => {
+    console.log("hello");
     dispatch(
       logUserIn({
         axios,
-        username: formValues.username,
-        password: formValues.password,
+        username: data.username,
+        password: data.password,
         callback: () => {
           push("/dashboard");
         },
@@ -31,23 +33,28 @@ function Login() {
   };
 
   return (
-    <form onSubmit={submitForm}>
-      <label htmlFor="userName">Username</label>
-      <input
-        type="text"
-        name="username"
-        placeholder="Enter username"
-        value={formValues.username}
-        onChange={handleChanges}
-      />
-      <label htmlFor="password">Password</label>
-      <input
-        type="password"
-        name="password"
-        placeholder="Enter password"
-        value={formValues.password}
-        onChange={handleChanges}
-      />
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <label htmlFor="userName">
+        Username
+        <input
+          type="text"
+          name="username"
+          placeholder="Enter username"
+          ref={register({ required: true, max: 20, min: 3 })}
+        />
+        <p>{errors.username?.message}</p>
+      </label>
+
+      <label htmlFor="password">
+        Password
+        <input
+          type="password"
+          name="password"
+          placeholder="Enter password"
+          ref={register}
+        />
+        <p>{errors.password?.message}</p>
+      </label>
       <button type="submit" className="link">
         Login
       </button>
