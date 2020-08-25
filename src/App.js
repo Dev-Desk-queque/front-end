@@ -45,6 +45,7 @@ const Messages = styled.section`
   .error,
   .inform,
   .warn {
+    filter: opacity(.825);
     padding: 1rem 2rem;
     width: max-content;
     display: flex;
