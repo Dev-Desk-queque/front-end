@@ -13,12 +13,14 @@ const Container = styled.div`
 
 export default function Issues(props) {
   const issues = useSelector((state) => state.issues);
+  const user = useSelector((state) => state.user);
 
   return (
     <Container>
       {issues.length > 0 ? (
         issues.map((issue) => {
-          return <Issue issue={issue} key={issue.key} />;
+          const myIssue = issue.question_user_id === user.id;
+          return <Issue issue={issue} key={issue.key} isMyIssue={myIssue} />;
         })
       ) : (
         <React.Fragment />

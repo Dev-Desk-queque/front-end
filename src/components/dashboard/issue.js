@@ -36,9 +36,13 @@ const Container = styled.section`
   .content {
     grid-column: 2 / 3;
   }
+  button {
+    grid-column: 1 / 3;
+  }
 `;
 
-export default function Issue({ issue, ...props }) {
+export default function Issue({ issue, isMyIssue, ...props }) {
+  console.log(isMyIssue);
   return (
     <Container className="issue">
       <div className="title">
@@ -49,6 +53,7 @@ export default function Issue({ issue, ...props }) {
       <p className="content">{issue.question}</p>
       <h3 className="topic">My Attempt:</h3>
       <p className="content">{issue.what_I_tried}</p>
+      {isMyIssue && <button>Delete</button>}
     </Container>
   );
 }
