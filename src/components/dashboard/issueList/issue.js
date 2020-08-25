@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
-import useAxios from "../../hooks/useAxios";
-import { deleteIssue, getIssues } from "../../actions";
+import useAxios from "../../../hooks/useAxios";
+import { deleteIssue, getIssues } from "../../../actions";
 
 const Container = styled.section`
   display: grid;

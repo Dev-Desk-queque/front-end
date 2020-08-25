@@ -1,6 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 import Navbar from "./components/navbar";
 import styled, { keyframes } from "styled-components";
 import PrivateRoute from "./components/PrivateRoute";
@@ -62,16 +67,19 @@ const Messages = styled.section`
 
 const Container = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  margin-top: 7rem;
+  height: calc(100vh - 7rem);
   justify-content: center;
   align-items: center;
-  margin-top: 8rem;
+  width: 100%;
 `;
 
 function App() {
   const { token, axiosWithAuth: axios } = useAxios();
   const dispatch = useDispatch();
   const systemMessages = useSelector((state) => state.systemMessages);
+  const user = useSelector((state) => state.user);
 
   useEffect(() => {
     if (token) {
@@ -124,7 +132,11 @@ function App() {
 
             {/* Here is where people will land when they first get here! */}
             <Route exact path="/">
-              <h2>Well hiiiii there!!! :D</h2>
+              {user.token !== null ? (
+                <Redirect to="/dashboard" />
+              ) : (
+                <Redirect to="/login" />
+              )}
             </Route>
 
             {/* If no valid route, here is a 404 page! Let's make it funny! :D */}
