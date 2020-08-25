@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 import useAxios from "../../../hooks/useAxios";
 import { deleteIssue, getIssues } from "../../../actions";
 
-const Container = styled.section`
+const Container = styled.button`
   display: grid;
   grid-template-columns: 35% auto;
   grid-template-rows: repeat(5, auto);
@@ -18,6 +18,7 @@ const Container = styled.section`
   padding: 1rem 2rem;
   margin: 1rem;
   border-radius: 2rem;
+  border: none;
   &.deleting {
     box-shadow: none;
     filter: opacity(0.5);
