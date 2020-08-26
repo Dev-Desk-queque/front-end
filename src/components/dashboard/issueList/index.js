@@ -17,10 +17,11 @@ const Container = styled.div`
   width: 100%;
   .issues {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     flex-wrap: wrap;
-    max-height: 100%;
-    align-items: center;
+    height: 100%;
+    align-items: flex-start;
+    overflow-x: hidden;
     overflow-y: scroll;
   }
 `;

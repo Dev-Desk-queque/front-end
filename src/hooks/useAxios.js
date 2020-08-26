@@ -11,12 +11,12 @@ function useAxios() {
   if (token) {
     axiosWithAuth = axios.create({
       baseURL: BASE_URL,
-      headers: { authorization: token },
+      headers: { authorization: token, "Access-Control-Allow-Origin": "*" },
     });
   } else {
     axiosWithAuth = axios.create({
       baseURL: BASE_URL,
-      headers: {},
+      headers: { "Access-Control-Allow-Origin": "*" },
     });
   }
 
@@ -24,7 +24,7 @@ function useAxios() {
     dispatch(logUserIn(newToken));
     axiosWithAuth = axios.create({
       baseURL: BASE_URL,
-      headers: { authorization: newToken },
+      headers: { authorization: newToken, "Access-Control-Allow-Origin": "*" },
     });
     if (callback) {
       callback();

@@ -1,24 +1,24 @@
-import React, { useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import useAxios from "../../../hooks/useAxios";
-import { deleteIssue, getIssues } from "../../../actions";
+import { deleteIssue, getIssues, getIssueUser } from "../../../actions";
 import { HighlightedString } from "../../../utils/wordSearch";
 
 const Container = styled.section`
   display: grid;
-  grid-template-columns: 35% auto;
-  grid-template-rows: repeat(5, auto);
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(5, 1fr);
   grid-gap: 1rem;
-  max-width: 30rem;
-  min-width: 20rem;
+  width: 100%;
   box-shadow: 0.0625rem 0.0625rem 0.25rem 0rem #2f2b4a;
   background: white;
   min-height: 20rem;
   padding: 1rem 2rem;
   margin: 1rem;
-  border-radius: 2rem;
+  border-radius: 0.75rem;
   border: none;
   &.deleting {
     box-shadow: none;
@@ -29,29 +29,37 @@ const Container = styled.section`
     cursor: pointer;
   }
   .title {
-    grid-column: 1 / 3;
+    grid-column: 2 / 4;
     text-align: center;
     font-size: 2rem;
-    border-bottom: thin solid black;
-  }
-  .topic,
-  .content,
-  .title {
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    text-align: center;
-  }
-  .topic {
-    grid-column: 1 / 2;
-    font-size: 1.5rem;
-  }
-  .content {
-    grid-column: 2 / 3;
+    &:first-child {
+      grid-row: 1 /2;
+    }
+    &:last-child {
+      grid-row: 5 / 6;
+    }
   }
   button {
-    grid-column: 1 / 3;
+    grid-column: 4 / 5;
+    grid-row: 5 / 6;
+  }
+  .content-preview {
+    grid-column: 2 / 4;
+    grid-row: 2 / 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    font-size: 1.5rem;
+    border: thin solid black;
+  }
+  .username {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    font-size: 1.75rem;
   }
 `;
 
@@ -69,6 +77,12 @@ export default function Issue({ issue, isMyIssue, ...props }) {
       deleteIssue({ axios, issue, callback: () => dispatch(getIssues(axios)) })
     );
   }
+  
+  useEffect(() => {
+    if (!issue.username) {
+      dispatch(getIssueUser({ axios, issue }));
+    }
+  }, []);
 
   function handleClick(e) {
     e.preventDefault();
@@ -78,22 +92,16 @@ export default function Issue({ issue, isMyIssue, ...props }) {
   return (
     <Container onClick={handleClick} className={!buttonEnabled && "deleting"}>
       <div className="title">
-        <h5>{HighlightedString(issue.topic.toUpperCase())}</h5>
+        <h5>Topic: {HighlightedString(issue.topic)}</h5>
+      </div>
+      <div className="username">
+        <p>{issue.username && issue.username}</p>
       </div>
       <div className="title">
         <p>Lang: {HighlightedString(issue.code_language)}</p>
       </div>
-      <div className="topic">
-        <h3>Question:</h3>
-      </div>
-      <div className="content">
+      <div className="content-preview">
         <p>{HighlightedString(issue.question)}</p>
-      </div>
-      <div className="topic">
-        <h3>My Attempt:</h3>
-      </div>
-      <div className="content">
-        <p>{HighlightedString(issue.what_I_tried)}</p>
       </div>
       {isMyIssue && (
         <button onClick={handleDelete} disabled={!buttonEnabled}>

@@ -12,6 +12,7 @@ export type iIssue = {
   topic?: string;
   question?: string;
   id?: number;
+  username?: string;
   is_resolved?: boolean;
   what_I_tried?: string | null;
   code_language?: string | null;
@@ -74,6 +75,17 @@ export default function reducer(state = initialState, action: iAction): iState {
 
     case types.SET_ISSUES:
       return { ...state, issues: action.payload as Array<iIssue> };
+
+    case types.SET_ISSUE_USER:
+      return {
+        ...state,
+        issues: state.issues.map((issue: iIssue) => {
+          let payload = action.payload as iIssue;
+          if (issue.id === payload.id) {
+            return payload;
+          } else return issue;
+        }),
+      };
 
     case types.ADD_NEW_MESSAGE:
       return {

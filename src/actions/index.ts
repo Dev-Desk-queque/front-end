@@ -1,14 +1,17 @@
 import { AxiosInstance } from "axios";
 import { v4 as uuid } from "uuid";
-import { iIssue, iIssueFilter } from "../reducer";
+import { iIssue, iIssueFilter, iState } from "../reducer";
 import decode from "jwt-decode";
 import { iSystemMessage } from "../reducer";
+import { dummyData } from "../utils/dummyData";
 
 export enum types {
   SET_NETWORK_LOADING = "SET_NETWORK_LOADING",
   SET_USER_LOGOUT = "SET_USER_LOGOUT",
   SET_USER = "SET_USER",
   SET_ISSUES = "SET_ISSUES",
+  SET_ISSUE_ANSWERS = "SET_ISSUE_ANSWERS",
+  SET_ISSUE_USER = "SET_ISSUE_USER",
   ADD_NEW_MESSAGE = "ADD_NEW_MESSAGE",
   REMOVE_MESSAGE = "REMOVE_MESSAGE",
   UPDATE_FILTER = "UPDATE_FILTER",
@@ -196,6 +199,7 @@ export const getIssues = (axios: AxiosInstance) => (dispatch: Function) => {
     .catch((err) => {
       returnAction(types.SET_NETWORK_LOADING, false, dispatch);
       dispatchMessage(messageTypes.ERROR, err.message, dispatch);
+      returnAction(types.SET_ISSUES, dummyData, dispatch);
     });
 };
 
@@ -271,6 +275,40 @@ export const deleteIssue = (options: {
       );
     });
 };
+
+export const getIssueUser = (options: {
+  axios: AxiosInstance;
+  issue: iIssue;
+}) => (dispatch: Function, getState: () => iState) => {
+  const stateIssue = getState().issues.find(
+    (i) => i.id === options.issue.id
+  ) as iIssue;
+  const { axios } = options;
+  if (!axios) {
+    throw axiosError;
+  }
+  axios
+    .get(`/api/devdesk/protected/user/${stateIssue.question_user_id}`)
+    .then((res) => {
+      returnAction(
+        types.SET_ISSUE_USER,
+        { ...stateIssue, username: res.data[0].username } as iIssue,
+        dispatch
+      );
+    })
+    .catch((err) => {
+      dispatchMessage(
+        messageTypes.ERROR,
+        `${err.message} ${err.response && err.response}`,
+        dispatch
+      );
+    });
+};
+
+export const getIssueAnswers = (options: {
+  axios: AxiosInstance;
+  issue: iIssue;
+}) => (dispatch: Function, getState: () => iState) => {};
 
 /* UX ACTIONS */
 
