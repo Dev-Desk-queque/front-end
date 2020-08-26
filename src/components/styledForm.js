@@ -55,7 +55,7 @@ export default styled.div`
     padding: 10rem 0rem;
     form {
       display: grid;
-      grid-template-columns: 20%, auto;
+      grid-template-columns: 0.2fr, 0.8fr;
       grid-gap: 2rem;
       margin: 0rem 2rem;
       label,
@@ -78,6 +78,7 @@ export default styled.div`
         padding: 1rem;
         border-radius: 0.5rem;
         border: none;
+        grid-column: 2 / 3;
       }
       input {
         grid-column: 2 / 3;
@@ -114,6 +115,10 @@ export default styled.div`
       button {
         grid-column: 1 / 3;
         margin: 0rem 25%;
+      }
+      .error {
+        grid-column: 1 / 3;
+        text-align: center;
       }
     }
   }

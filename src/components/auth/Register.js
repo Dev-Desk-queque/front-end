@@ -17,20 +17,31 @@ function Register() {
 
   const onSubmit = (data) => {
     console.log(data);
-
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <p className="error">{errors.username?.message}</p>
       <label htmlFor="userName">Username</label>
-      <input type="text" name="username" placeholder="Enter username" ref={register}/>
-      <p>{errors.username?.message}</p>
+      <input
+        type="text"
+        name="username"
+        placeholder="Enter username"
+        ref={register}
+      />
+
+      <p className="error">{errors.password?.message}</p>
       <label htmlFor="password">Password</label>
-      <input type="password" name="password" placeholder="Enter password" ref={register}/>
-      <p>{errors.password?.message}</p>
+      <input
+        type="password"
+        name="password"
+        placeholder="Enter password"
+        ref={register}
+      />
+
       <label htmlFor="student">Are you a student?</label>
       <div className="checkbox">
-        <input type="checkbox" name="student" ref={register}/>
+        <input type="checkbox" name="student" ref={register} />
         <span />
         <p>{errors.checkbox?.message}</p>
       </div>

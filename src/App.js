@@ -25,6 +25,9 @@ const errorKeyframe = keyframes`
     transform: translate(0%, 0%);
     filter: opacity(1);
   }
+  50% {
+    filter: opacity(1);
+  }
   100% {
     filter: opacity(0);
   }

@@ -32,27 +32,22 @@ function Login() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <label htmlFor="userName">
-        Username
-        <input
-          type="text"
-          name="username"
-          placeholder="Enter username"
-          ref={register({ required: true, max: 20, min: 3 })}
-        />
-        <p>{errors.username?.message}</p>
-      </label>
-
-      <label htmlFor="password">
-        Password
-        <input
-          type="password"
-          name="password"
-          placeholder="Enter password"
-          ref={register}
-        />
-        <p>{errors.password?.message}</p>
-      </label>
+      <p className="error">{errors.username?.message}</p>
+      <label htmlFor="userName">Username</label>
+      <input
+        type="text"
+        name="username"
+        placeholder="Enter username"
+        ref={register({ required: true, max: 20, min: 3 })}
+      />
+      <p className="error">{errors.password?.message}</p>
+      <label htmlFor="password">Password</label>
+      <input
+        type="password"
+        name="password"
+        placeholder="Enter password"
+        ref={register}
+      />
       <button type="submit" className="link">
         Login
       </button>
