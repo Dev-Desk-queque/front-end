@@ -11,8 +11,9 @@ const Container = styled.div`
   width: 25rem;
   height: 100%;
   box-shadow: 0rem 0rem 0.25rem 0rem black;
-  overflow-y: scroll;
+  overflow-y: auto;
   section.issues {
+    background: black;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -32,7 +33,7 @@ export default function Sidebar() {
       <h1>Watching</h1>
       <section className="issues">
         {watchedIssues.map((issue) => {
-          return <h1>{issue.question}</h1>;
+          return <h1 key={issue.key}>{issue.question}</h1>;
         })}
       </section>
     </Container>
