@@ -33,7 +33,7 @@ export default function Sidebar() {
       <h1>Watching</h1>
       <section className="issues">
         {watchedIssues.map((issue) => {
-          return <h1 key={issue.key}>{issue.question}</h1>;
+          return <h1 key={issue.key}>{issue.topic}</h1>;
         })}
       </section>
     </Container>

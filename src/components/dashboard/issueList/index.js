@@ -12,11 +12,14 @@ const Container = styled.div`
   grid-template-columns: 1fr;
   grid-template-rows: 5rem auto;
   align-items: center;
+  overflow: hidden;
   height: 100%;
   width: 100%;
   .issues {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
+    max-height: 100%;
     align-items: center;
     overflow-y: scroll;
   }
