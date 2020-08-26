@@ -17,6 +17,15 @@ function Register() {
 
   const onSubmit = (data) => {
     console.log(data);
+    dispatch(
+      registerUser({
+        axios,
+        username: data.username,
+        password: data.password,
+        is_helper: data.is_helper,
+        is_student: data.is_student,
+      })
+    );
   };
 
   return (

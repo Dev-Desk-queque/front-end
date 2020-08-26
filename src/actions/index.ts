@@ -111,9 +111,18 @@ export const registerUser = (options: {
   axios: AxiosInstance;
   username: string;
   password: string;
+  is_helper: boolean;
+  is_student: boolean;
   callback?: Function;
 }) => (dispatch: Function) => {
-  const { axios, username, password, callback } = options;
+  const {
+    axios,
+    username,
+    password,
+    is_helper,
+    is_student,
+    callback,
+  } = options;
 
   // No axios? No Enter
   if (!axios) {
@@ -122,7 +131,12 @@ export const registerUser = (options: {
 
   returnAction(types.SET_NETWORK_LOADING, true, dispatch);
   axios
-    .post("/api/devdesk/auth/register", { username, password })
+    .post("/api/devdesk/auth/register", {
+      username,
+      password,
+      is_helper,
+      is_student,
+    })
     .then(() => {
       axios
         .post("/api/devdesk/auth/login", { username, password })
@@ -189,7 +203,6 @@ export const submitNewIssue = (options: {
   issue: iIssue;
   callback?: Function;
 }) => (dispatch: Function, getState: Function) => {
-
   const { axios, issue, callback } = options;
 
   if (!axios) {
