@@ -1,9 +1,11 @@
-import React from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect } from "react";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { updateFilter } from "../../../../actions";
 import useForm from "../../../../hooks/useForm";
 
-const Container = styled.div`
+const Container = styled.section`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -19,20 +21,22 @@ const Container = styled.div`
       display: flex;
       justify-content: center;
       align-items: center;
+      margin: 0rem 1.5rem;
       input {
-        margin: 0rem 0.25rem;
+        margin: 0rem 0.5rem;
       }
     }
   }
 `;
 
-const initialFilter = {
-  showCompleted: false,
-};
-
 export default function Filter() {
   const globalFilter = useSelector((state) => state.issueFilter);
-  const [filter, setFilter] = useForm(globalFilter || initialFilter);
+  const [filter, setFilter] = useForm(globalFilter);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(updateFilter(filter));
+  }, [filter]);
 
   return (
     <Container>
@@ -40,11 +44,21 @@ export default function Filter() {
         <label>
           Show Answered
           <input
-            name="showCompleted"
-            id="showCompleted"
+            name="showAnswered"
+            id="showAnswered"
             type="checkbox"
             onChange={setFilter}
             checked={filter.showCompleted}
+          />
+        </label>
+        <label htmlFor="textSearch">
+          Search:
+          <input
+            name="textSearch"
+            type="text"
+            id="textSearch"
+            onChange={setFilter}
+            value={filter.textSearch}
           />
         </label>
       </form>

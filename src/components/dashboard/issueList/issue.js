@@ -4,8 +4,9 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import useAxios from "../../../hooks/useAxios";
 import { deleteIssue, getIssues } from "../../../actions";
+import { HighlightedString } from "../../../utils/wordSearch";
 
-const Container = styled.button`
+const Container = styled.section`
   display: grid;
   grid-template-columns: 35% auto;
   grid-template-rows: repeat(5, auto);
@@ -77,13 +78,23 @@ export default function Issue({ issue, isMyIssue, ...props }) {
   return (
     <Container onClick={handleClick} className={!buttonEnabled && "deleting"}>
       <div className="title">
-        <h5>{issue.topic.toUpperCase()}</h5>
+        <h5>{HighlightedString(issue.topic.toUpperCase())}</h5>
       </div>
-      <div className="title">Lang: {issue.code_language}</div>
-      <h3 className="topic">Question:</h3>
-      <p className="content">{issue.question}</p>
-      <h3 className="topic">My Attempt:</h3>
-      <p className="content">{issue.what_I_tried}</p>
+      <div className="title">
+        <p>Lang: {HighlightedString(issue.code_language)}</p>
+      </div>
+      <div className="topic">
+        <h3>Question:</h3>
+      </div>
+      <div className="content">
+        <p>{HighlightedString(issue.question)}</p>
+      </div>
+      <div className="topic">
+        <h3>My Attempt:</h3>
+      </div>
+      <div className="content">
+        <p>{HighlightedString(issue.what_I_tried)}</p>
+      </div>
       {isMyIssue && (
         <button onClick={handleDelete} disabled={!buttonEnabled}>
           Delete

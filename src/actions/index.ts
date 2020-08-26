@@ -1,6 +1,6 @@
 import { AxiosInstance } from "axios";
 import { v4 as uuid } from "uuid";
-import { iIssue } from "../reducer";
+import { iIssue, iIssueFilter } from "../reducer";
 import decode from "jwt-decode";
 import { iSystemMessage } from "../reducer";
 
@@ -11,6 +11,7 @@ export enum types {
   SET_ISSUES = "SET_ISSUES",
   ADD_NEW_MESSAGE = "ADD_NEW_MESSAGE",
   REMOVE_MESSAGE = "REMOVE_MESSAGE",
+  UPDATE_FILTER = "UPDATE_FILTER",
 }
 
 export enum messageTypes {
@@ -269,4 +270,10 @@ export const deleteIssue = (options: {
         dispatch
       );
     });
+};
+
+/* UX ACTIONS */
+
+export const updateFilter = (filter: iIssueFilter) => (dispatch: Function) => {
+  returnAction(types.UPDATE_FILTER, filter, dispatch);
 };

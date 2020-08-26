@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useSelector } from "react-redux";
 import Filter from "./filter";
 import Issue from "./issue";
+import { search } from "../../../utils/wordSearch";
 
 const Container = styled.div`
   display: grid;
@@ -24,6 +25,7 @@ const Container = styled.div`
 export default function IssueList() {
   const issues = useSelector((state) => state.issues);
   const user = useSelector((state) => state.user);
+  const globalFilter = useSelector((state) => state.issueFilter);
 
   return (
     <React.Fragment>
@@ -31,12 +33,29 @@ export default function IssueList() {
         <Filter />
         <section className="issues">
           {issues.length > 0 ? (
-            issues.map((issue) => {
-              const myIssue = issue.question_user_id === user.id;
-              return (
-                <Issue issue={issue} key={issue.key} isMyIssue={myIssue} />
-              );
-            })
+            issues
+              // eslint-disable-next-line array-callback-return
+              .filter((issue) => {
+                if (globalFilter.textSearch) {
+                  let found = false;
+                  Object.keys(issue).forEach((k) => {
+                    if (typeof issue[k] === "string") {
+                      if (search(issue[k], globalFilter.textSearch)) {
+                        found = true;
+                      }
+                    }
+                  });
+                  if (found) {
+                    return issue;
+                  }
+                } else return issue;
+              })
+              .map((issue) => {
+                const myIssue = issue.question_user_id === user.id;
+                return (
+                  <Issue issue={issue} key={issue.key} isMyIssue={myIssue} />
+                );
+              })
           ) : (
             <React.Fragment />
           )}

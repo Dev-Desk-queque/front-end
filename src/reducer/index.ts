@@ -1,9 +1,12 @@
 import { iAction, types, messageTypes } from "../actions";
 import decode from "jwt-decode";
 
-export type iAnswer = {
+export type iAnswer = {};
 
-}
+export type iIssueFilter = {
+  showAnswered: boolean;
+  textSearch: string;
+};
 
 export type iIssue = {
   topic?: string;
@@ -14,7 +17,7 @@ export type iIssue = {
   code_language?: string | null;
   question_user_id?: number;
   key?: string;
-  answer?: iAnswer
+  answer?: iAnswer;
 };
 
 export type iSystemMessage = {
@@ -45,6 +48,7 @@ const initialState = {
   issues: [] as Array<iIssue>,
   isHelper: false,
   systemMessages: [] as Array<iSystemMessage>,
+  issueFilter: { showAnswered: false, textSearch: "" } as iIssueFilter,
 };
 
 export type iState = typeof initialState;
@@ -90,6 +94,9 @@ export default function reducer(state = initialState, action: iAction): iState {
           } else return null;
         }),
       };
+
+    case types.UPDATE_FILTER:
+      return { ...state, issueFilter: action.payload as iIssueFilter };
 
     default:
       return state;
