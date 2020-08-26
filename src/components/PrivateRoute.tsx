@@ -15,7 +15,7 @@ interface iPrivateRouteProps extends RouteProps {
 export default (props: iPrivateRouteProps) => {
   const { redirectPath, ...rest } = props;
 
-  const token = useSelector((state: iState) => state.token);
+  const token = useSelector((state: iState) => state.user.token);
   return (
     <>
       {token !== undefined && token !== null ? (
