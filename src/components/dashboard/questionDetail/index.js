@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { useHistory, useParams, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -69,7 +69,6 @@ const Container = styled.div`
 export default function QuestionDetails() {
   const { id } = useParams();
   console.log(id);
-  const { push: reroute } = useHistory();
   const question = useSelector((state) =>
     state.issues.find((issue) => issue.id.toString() === id)
   );

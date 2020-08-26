@@ -2,14 +2,12 @@ import React from "react";
 import useAxios from "../../hooks/useAxios";
 import { useDispatch } from "react-redux";
 import { registerUser } from "../../actions";
-import { useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import schema from "./formSchema";
 import { yupResolver } from "@hookform/resolvers";
 
 function Register() {
   const { axiosWithAuth: axios } = useAxios();
-  const { push: reroute } = useHistory();
   const dispatch = useDispatch();
   const { register, handleSubmit, errors } = useForm({
     resolver: yupResolver(schema),
