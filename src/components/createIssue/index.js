@@ -3,7 +3,8 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { submitNewIssue, getIssues } from "../../actions";
 import useAxios from "../../hooks/useAxios";
-import useForm from "../../hooks/useForm";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
 import StyledForm from "../styledForm";
 
 const initialFormValues = {

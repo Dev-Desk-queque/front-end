@@ -1,120 +1,45 @@
-import React, { useState } from "react";
+import React from "react";
 import useAxios from "../../hooks/useAxios";
-import * as yup from "yup";
 import { useDispatch } from "react-redux";
 import { registerUser } from "../../actions";
 import { useHistory } from "react-router-dom";
-
-const formSchema = yup.object().shape({
-  username: yup
-    .string()
-    .min(2, "Username must be at least 2 characters long")
-    .required("Username is a required field"),
-  password: yup.string(),
-  student: yup.boolean().oneOf([false]),
-  helper: yup.boolean().oneOf([false]),
-});
+import { useForm } from "react-hook-form";
+import schema from "./formSchema";
+import { yupResolver } from "@hookform/resolvers";
 
 function Register() {
-  const dispatch = useDispatch();
-  const { push: reroute } = useHistory();
   const { axiosWithAuth: axios } = useAxios();
-  const [defaultRegForm, setDefaultRegForm] = useState({
-    username: "",
-    password: "",
-    student: "false",
-    helper: "false",
+  const { push: reroute } = useHistory();
+  const dispatch = useDispatch();
+  const { register, handleSubmit, errors } = useForm({
+    resolver: yupResolver(schema),
   });
-  const [regFormState, setRegFormState] = useState(defaultRegForm);
-  const [errorState, setErrorState] = useState(defaultRegForm);
 
-  //   const validation = (event) => {
-  //     yup
-  //       .reach(formSchema, event.target.name)
-  //       .validate(event.target.value)
-  //       .then((valid) => {
-  //         setErrorState({
-  //           ...errorState,
-  //           [event.target.name]: "",
-  //         });
-  //       });
-  //   .catch((error) => {
-  //     console.log(error.errors);
-  //     setErrorState({
-  //       ...errorState,
-  //       [event.target.name]: error.errors[0],
-  //     });
-  //   });
-  //  };
+  const onSubmit = (data) => {
+    console.log(data);
 
-  const handleChanges = (event) => {
-    // event.persist();
-    // validation(event);
-    let value =
-      event.target.type === "checkbox"
-        ? event.target.checked
-        : event.target.value;
-    setRegFormState({
-      ...regFormState,
-      [event.target.name]: value,
-      id: Date.now(),
-    });
-    console.log("input changed!", value);
-  };
-
-  const submitForm = (event) => {
-    event.preventDefault();
-    console.log("form submitted!");
-    dispatch(
-      registerUser({
-        axios,
-        password: regFormState.password,
-        username: regFormState.username,
-        callback: () => {
-          reroute("/dashboard");
-        },
-      })
-    );
   };
 
   return (
-    <form onSubmit={submitForm}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <label htmlFor="userName">Username</label>
-      <input
-        type="text"
-        name="username"
-        placeholder="Enter username"
-        value={regFormState.username}
-        onChange={handleChanges}
-      />
+      <input type="text" name="username" placeholder="Enter username" ref={register}/>
+      <p>{errors.username?.message}</p>
       <label htmlFor="password">Password</label>
-      <input
-        type="password"
-        name="password"
-        placeholder="Enter password"
-        value={regFormState.password}
-        onChange={handleChanges}
-      />
+      <input type="password" name="password" placeholder="Enter password" ref={register}/>
+      <p>{errors.password?.message}</p>
       <label htmlFor="student">Are you a student?</label>
       <div className="checkbox">
-        <input
-          type="checkbox"
-          name="student"
-          value={regFormState.student}
-          onChange={handleChanges}
-        />
-        <span className={`${regFormState.student === true ? "checked" : ""}`} />
+        <input type="checkbox" name="student" ref={register}/>
+        <span />
+        <p>{errors.checkbox?.message}</p>
       </div>
 
       <label htmlFor="student">Are you a helper?</label>
       <div className="checkbox">
-        <input
-          type="checkbox"
-          name="helper"
-          value={regFormState.helper}
-          onChange={handleChanges}
-        />
-        <span className={`${regFormState.helper === true ? "checked" : ""}`} />
+        <input type="checkbox" name="helper" ref={register} />
+        <span />
+        <p>{errors.checkbox?.message}</p>
       </div>
 
       <button name="button" type="submit">
