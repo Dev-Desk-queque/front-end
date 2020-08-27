@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { submitNewIssue, getIssues, sendEditedIssue } from "../../actions";
+import { submitNewIssue, getIssues, sendEditedIssue, clearEditIssue } from "../../actions";
 import useAxios from "../../hooks/useAxios";
 import StyledForm from "../styledForm";
 import useForm from "../../hooks/useForm";
@@ -33,6 +33,7 @@ export default function CreateIssue(props) {
           callback: () => {
             reroute("/dashboard");
             dispatch(getIssues(axios));
+            dispatch(clearEditIssue({}));
           },
         })
       );
