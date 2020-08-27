@@ -431,3 +431,13 @@ export const editIssue = (options: { issue: iIssue; callback?: Function }) => (
     callback();
   }
 };
+
+export const clearEditIssue = (options: { callback?: Function }) => (
+  dispatch: Function
+) => {
+  const { callback } = options;
+  returnAction(types.REMOVE_ISSUE_TO_EDIT, null, dispatch);
+  if (callback) {
+    callback();
+  }
+};
