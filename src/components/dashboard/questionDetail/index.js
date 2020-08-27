@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteIssue, getIssues, editIssue } from "../../../actions";
 import { useParams, Link, useHistory } from "react-router-dom";
+import { v4 as uuid } from "uuid";
 import useAxios from "../../../hooks/useAxios";
 import styled from "styled-components";
 
@@ -57,6 +58,7 @@ const Container = styled.div`
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      text-align: center;
       grid-row: 1 / 2;
       grid-column: 3 / 5;
       font-size: 2rem;
@@ -72,7 +74,8 @@ const Container = styled.div`
       font-size: 1.5rem;
     }
     .edit,
-    .delete {
+    .delete,
+    .answer {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -81,9 +84,29 @@ const Container = styled.div`
       grid-column: 2 / 3;
       grid-row: 6 / 7;
     }
+    .answer {
+      grid-column: 3 / 5;
+      grid-row: 5 / 6;
+    }
     .delete {
       grid-column: 5 / 6;
       grid-row: 6 / 7;
+    }
+    .answers {
+      grid-row: 6 / 7;
+      grid-column: 2 / 6;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      div {
+        margin: 0.25rem 0rem;
+        padding: 0.75rem 0rem;
+        border: thin solid black;
+        width: 100%;
+        text-align: center;
+        flex-wrap: wrap;
+      }
     }
   }
 `;
@@ -130,6 +153,10 @@ export default function QuestionDetails() {
     );
   }
 
+  function handleAnswer(e) {
+    e.preventDefault();
+  }
+
   return (
     <Container>
       <div className="back-button">
@@ -142,6 +169,7 @@ export default function QuestionDetails() {
           </div>
           <div className="content">
             <p>{question.question}</p>
+            <p>I tried: {question.what_I_tried}</p>
           </div>
           {user.id === question.question_user_id && (
             <React.Fragment>
@@ -154,6 +182,24 @@ export default function QuestionDetails() {
                 </button>
               </div>
             </React.Fragment>
+          )}
+          {user.id !== question.question_user_id && (
+            <React.Fragment>
+              <div className="answer">
+                <button onClick={handleAnswer}>Answer</button>
+              </div>
+            </React.Fragment>
+          )}
+          {question.answers.length > 0 && (
+            <div className="answers">
+              {question.answers.map((answer) => {
+                return (
+                  <div key={uuid()}>
+                    <p>{answer.answer}</p>
+                  </div>
+                );
+              })}
+            </div>
           )}
         </section>
       )}

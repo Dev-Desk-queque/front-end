@@ -92,8 +92,6 @@ export default function Sidebar() {
     return toReturn;
   });
 
-  console.log(user);
-
   return (
     <Container>
       <div>
