@@ -1,10 +1,16 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { deleteIssue, getIssues, editIssue } from "../../../actions";
+import {
+  deleteIssue,
+  getIssues,
+  editIssue,
+  sendAnswer,
+} from "../../../actions";
 import { useParams, Link, useHistory } from "react-router-dom";
 import { v4 as uuid } from "uuid";
 import useAxios from "../../../hooks/useAxios";
 import styled from "styled-components";
+import AnswerForm from "./answerForm";
 
 const Container = styled.div`
   display: flex;
@@ -63,6 +69,17 @@ const Container = styled.div`
       grid-column: 3 / 5;
       font-size: 2rem;
     }
+    .username {
+      grid-row: 1 / 2;
+      grid-column: 1 / 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      font-size: 2rem;
+      font-style: italic;
+    }
     .content {
       grid-column: 2 / 6;
       grid-row: 2 / 6;
@@ -85,7 +102,7 @@ const Container = styled.div`
       grid-row: 6 / 7;
     }
     .answer {
-      grid-column: 3 / 5;
+      grid-column: 2 / 6;
       grid-row: 5 / 6;
     }
     .delete {
@@ -122,6 +139,8 @@ export default function QuestionDetails() {
   const user = useSelector((state) => state.user);
 
   const [deleteEnabled, setDeleteEnabled] = useState(true);
+  const [isAnswering, setIsAnswering] = useState(false);
+  const [answerValues, setAnswerValues] = useState({ answer: "" });
 
   function handleEdit(e) {
     e.preventDefault();
@@ -155,6 +174,31 @@ export default function QuestionDetails() {
 
   function handleAnswer(e) {
     e.preventDefault();
+    setIsAnswering(!isAnswering);
+  }
+
+  function handleAnswerSubmit(e) {
+    e.preventDefault();
+    const answer = {
+      answer: answerValues.answer,
+      question_id: question.id,
+      answer_user_id: user.id,
+    };
+    dispatch(
+      sendAnswer({
+        axios,
+        answer,
+        issue: question,
+        callback: () => {
+          dispatch(getIssues(axios));
+        },
+      })
+    );
+  }
+
+  function onAnswerFormChange(e) {
+    const { name, value } = e.target;
+    setAnswerValues({ ...answerValues, [name]: value });
   }
 
   return (
@@ -171,6 +215,9 @@ export default function QuestionDetails() {
             <p>{question.question}</p>
             <p>I tried: {question.what_I_tried}</p>
           </div>
+          <div className="username">
+            <p>{question.username}</p>
+          </div>
           {user.id === question.question_user_id && (
             <React.Fragment>
               <div className="edit">
@@ -186,7 +233,19 @@ export default function QuestionDetails() {
           {user.id !== question.question_user_id && (
             <React.Fragment>
               <div className="answer">
-                <button onClick={handleAnswer}>Answer</button>
+                {!isAnswering ? (
+                  <button onClick={handleAnswer}>Answer</button>
+                ) : (
+                  <AnswerForm
+                    values={answerValues}
+                    onUpdate={onAnswerFormChange}
+                    onSubmit={handleAnswerSubmit}
+                    onCancel={(e) => {
+                      e.preventDefault();
+                      setIsAnswering(false);
+                    }}
+                  />
+                )}
               </div>
             </React.Fragment>
           )}

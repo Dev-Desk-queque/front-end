@@ -1,6 +1,6 @@
 import { AxiosInstance, AxiosPromise } from "axios";
 import { v4 as uuid } from "uuid";
-import { iIssue, iIssueFilter, iState } from "../reducer";
+import { iIssue, iIssueFilter, iState, iAnswer } from "../reducer";
 import decode from "jwt-decode";
 import { iSystemMessage } from "../reducer";
 import { dummyData } from "../utils/dummyData";
@@ -360,6 +360,32 @@ export const sendEditedIssue = (options: {
     .put(`/api/devdesk/protected/question/${issue.id}`, toSend)
     .then((res) => {
       dispatch(getIssues(axios, callback));
+    })
+    .catch((err) => {
+      returnAction(types.SET_NETWORK_LOADING, false, dispatch);
+      dispatchMessage(messageTypes.ERROR, err.message, dispatch);
+    });
+};
+
+export const sendAnswer = (options: {
+  axios: AxiosInstance;
+  answer: iAnswer;
+  issue: iIssue;
+  callback?: Function;
+}) => (dispatch: Function) => {
+  const { axios, issue, answer, callback } = options;
+  if (!axios) throw axiosError;
+
+  returnAction(types.SET_NETWORK_LOADING, true, dispatch);
+
+  axios
+    .post(`/api/devdesk/protected/question/${issue.id}/answer`, answer)
+    .then(() => {
+      returnAction(types.SET_NETWORK_LOADING, false, dispatch);
+      dispatchMessage(messageTypes.INFORMATION, "Answer Submitted", dispatch);
+      if (callback) {
+        callback();
+      }
     })
     .catch((err) => {
       returnAction(types.SET_NETWORK_LOADING, false, dispatch);
