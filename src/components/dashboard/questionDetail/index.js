@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { deleteIssue, getIssues } from "../../../actions";
+import { deleteIssue, getIssues, editIssue } from "../../../actions";
 import { useParams, Link, useHistory } from "react-router-dom";
 import useAxios from "../../../hooks/useAxios";
 import styled from "styled-components";
@@ -102,6 +102,14 @@ export default function QuestionDetails() {
 
   function handleEdit(e) {
     e.preventDefault();
+    dispatch(
+      editIssue({
+        issue: question,
+        callback: () => {
+          reroute("/create-issue");
+        },
+      })
+    );
   }
 
   function handleDelete(e) {
