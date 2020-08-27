@@ -1,9 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import useAxios from "../../../hooks/useAxios";
-import { deleteIssue, getIssues } from "../../../actions";
 import { HighlightedString } from "../../../utils/wordSearch";
 
 const Container = styled.section`
@@ -19,10 +16,7 @@ const Container = styled.section`
   margin: 1rem;
   border-radius: 0.75rem;
   border: none;
-  &.deleting {
-    box-shadow: none;
-    filter: opacity(0.5);
-  }
+  transition: 0.0625s ease-in-out all;
   &:hover {
     box-shadow: 0.325rem 0.325rem 0.75rem 0rem #2f2b4a;
     cursor: pointer;
@@ -63,19 +57,7 @@ const Container = styled.section`
 `;
 
 export default function Issue({ issue, isMyIssue, ...props }) {
-  const { axiosWithAuth: axios } = useAxios();
-  const dispatch = useDispatch();
-  const [buttonEnabled, setButtonEnabled] = useState(true);
   const { push: reroute } = useHistory();
-
-  function handleDelete(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    setButtonEnabled(false);
-    dispatch(
-      deleteIssue({ axios, issue, callback: () => dispatch(getIssues(axios)) })
-    );
-  }
 
   function handleClick(e) {
     e.preventDefault();
@@ -83,7 +65,7 @@ export default function Issue({ issue, isMyIssue, ...props }) {
   }
 
   return (
-    <Container onClick={handleClick} className={!buttonEnabled && "deleting"}>
+    <Container onClick={handleClick}>
       <div className="title">
         <h5>Topic: {HighlightedString(issue.topic)}</h5>
       </div>
@@ -96,11 +78,6 @@ export default function Issue({ issue, isMyIssue, ...props }) {
       <div className="content-preview">
         <p>{HighlightedString(issue.question)}</p>
       </div>
-      {isMyIssue && (
-        <button onClick={handleDelete} disabled={!buttonEnabled}>
-          Delete
-        </button>
-      )}
     </Container>
   );
 }

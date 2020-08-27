@@ -176,7 +176,9 @@ export const registerUser = (options: {
     });
 };
 
-export const getIssues = (axios: AxiosInstance) => (dispatch: Function) => {
+export const getIssues = (axios: AxiosInstance, callback?: Function) => (
+  dispatch: Function
+) => {
   if (!axios) {
     throw axiosError;
   }
@@ -193,7 +195,7 @@ export const getIssues = (axios: AxiosInstance) => (dispatch: Function) => {
         .map((issue: iIssue) => {
           return { ...issue, key: uuid() };
         });
-      dispatch(getIssueUsers({ axios, issues }));
+      dispatch(getIssueUsers({ axios, issues, callback }));
       returnAction(types.SET_NETWORK_LOADING, false, dispatch);
     })
     .catch((err) => {
@@ -276,8 +278,9 @@ export const deleteIssue = (options: {
 const getIssueUsers = (options: {
   axios: AxiosInstance;
   issues: Array<iIssue>;
+  callback?: Function;
 }) => (dispatch: Function) => {
-  const { axios, issues } = options;
+  const { axios, issues, callback } = options;
   if (!axios) {
     throw axiosError;
   }
@@ -293,6 +296,9 @@ const getIssueUsers = (options: {
       issuesToSend.push({ ...issues[index], username: res.data[0].username });
     });
     returnAction(types.SET_ISSUES, issuesToSend, dispatch);
+    if (callback) {
+      callback();
+    }
   });
 };
 
