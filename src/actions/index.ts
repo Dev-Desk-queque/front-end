@@ -1,14 +1,17 @@
-import { AxiosInstance } from "axios";
+import { AxiosInstance, AxiosPromise } from "axios";
 import { v4 as uuid } from "uuid";
-import { iIssue, iIssueFilter } from "../reducer";
+import { iIssue, iIssueFilter, iState } from "../reducer";
 import decode from "jwt-decode";
 import { iSystemMessage } from "../reducer";
+import { dummyData } from "../utils/dummyData";
 
 export enum types {
   SET_NETWORK_LOADING = "SET_NETWORK_LOADING",
   SET_USER_LOGOUT = "SET_USER_LOGOUT",
   SET_USER = "SET_USER",
   SET_ISSUES = "SET_ISSUES",
+  SET_ISSUE_ANSWERS = "SET_ISSUE_ANSWERS",
+  SET_ISSUE_USER = "SET_ISSUE_USER",
   ADD_NEW_MESSAGE = "ADD_NEW_MESSAGE",
   REMOVE_MESSAGE = "REMOVE_MESSAGE",
   UPDATE_FILTER = "UPDATE_FILTER",
@@ -190,12 +193,13 @@ export const getIssues = (axios: AxiosInstance) => (dispatch: Function) => {
         .map((issue: iIssue) => {
           return { ...issue, key: uuid() };
         });
+      dispatch(getIssueUsers({ axios, issues }));
       returnAction(types.SET_NETWORK_LOADING, false, dispatch);
-      returnAction(types.SET_ISSUES, issues, dispatch);
     })
     .catch((err) => {
       returnAction(types.SET_NETWORK_LOADING, false, dispatch);
       dispatchMessage(messageTypes.ERROR, err.message, dispatch);
+      returnAction(types.SET_ISSUES, dummyData, dispatch);
     });
 };
 
@@ -213,7 +217,6 @@ export const submitNewIssue = (options: {
   returnAction(types.SET_NETWORK_LOADING, true, dispatch);
   const newIssue: iIssue = {
     ...issue,
-    code_language: "Java",
     question_user_id: user.id,
   };
   axios
@@ -230,7 +233,6 @@ export const submitNewIssue = (options: {
       }
     })
     .catch((err) => {
-      console.log(err.response);
       returnAction(types.SET_NETWORK_LOADING, false, dispatch);
       dispatchMessage(
         messageTypes.ERROR,
@@ -256,7 +258,6 @@ export const deleteIssue = (options: {
       returnAction(types.SET_NETWORK_LOADING, false, dispatch);
       dispatchMessage(messageTypes.INFORMATION, "Question deleted", dispatch);
       if (callback) {
-        console.log("calling callback");
         callback();
       }
     })
@@ -271,6 +272,34 @@ export const deleteIssue = (options: {
       );
     });
 };
+
+const getIssueUsers = (options: {
+  axios: AxiosInstance;
+  issues: Array<iIssue>;
+}) => (dispatch: Function) => {
+  const { axios, issues } = options;
+  if (!axios) {
+    throw axiosError;
+  }
+  const promises = [] as Array<AxiosPromise>;
+  const issuesToSend = [] as Array<iIssue>;
+  issues.forEach((issue) => {
+    promises.push(
+      axios.get(`/api/devdesk/protected/user/${issue.question_user_id}`)
+    );
+  });
+  Promise.all(promises).then((arr) => {
+    arr.forEach((res, index) => {
+      issuesToSend.push({ ...issues[index], username: res.data[0].username });
+    });
+    returnAction(types.SET_ISSUES, issuesToSend, dispatch);
+  });
+};
+
+export const getIssueAnswers = (options: {
+  axios: AxiosInstance;
+  issue: iIssue;
+}) => (dispatch: Function, getState: () => iState) => {};
 
 /* UX ACTIONS */
 

@@ -40,7 +40,7 @@ export default function Filter() {
 
   return (
     <Container>
-      <form>
+      <form onSubmit={(e) => e.preventDefault()}>
         <label>
           Show Answered
           <input

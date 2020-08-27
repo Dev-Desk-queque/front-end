@@ -68,11 +68,9 @@ const Container = styled.div`
 
 export default function QuestionDetails() {
   const { id } = useParams();
-  console.log(id);
   const question = useSelector((state) =>
     state.issues.find((issue) => issue.id.toString() === id)
   );
-  console.log(question);
 
   return (
     <Container>

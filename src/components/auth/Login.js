@@ -17,7 +17,6 @@ function Login() {
   const { push } = useHistory();
 
   const onSubmit = (data) => {
-    console.log("hello");
     dispatch(
       logUserIn({
         axios,
