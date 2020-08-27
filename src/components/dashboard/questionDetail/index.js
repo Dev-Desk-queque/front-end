@@ -1,6 +1,8 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { useParams, Link } from "react-router-dom";
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { deleteIssue, getIssues } from "../../../actions";
+import { useParams, Link, useHistory } from "react-router-dom";
+import useAxios from "../../../hooks/useAxios";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -63,14 +65,60 @@ const Container = styled.div`
       grid-column: 3 / 5;
       font-size: 2rem;
     }
+    .content {
+      grid-column: 2 / 6;
+      grid-row: 2 / 6;
+    }
+    .edit,
+    .delete {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .edit {
+      grid-column: 2 / 3;
+      grid-row: 6 / 7;
+    }
+    .delete {
+      grid-column: 5 / 6;
+      grid-row: 6 / 7;
+    }
   }
 `;
 
 export default function QuestionDetails() {
   const { id } = useParams();
+  const { push: reroute } = useHistory();
+  const { axiosWithAuth: axios } = useAxios();
+  const dispatch = useDispatch();
   const question = useSelector((state) =>
     state.issues.find((issue) => issue.id.toString() === id)
   );
+  const user = useSelector((state) => state.user);
+
+  const [deleteEnabled, setDeleteEnabled] = useState(true);
+
+  function handleEdit(e) {
+    e.preventDefault();
+  }
+
+  function handleDelete(e) {
+    e.preventDefault();
+    setDeleteEnabled(false);
+    dispatch(
+      deleteIssue({
+        axios,
+        issue: question,
+        callback: () => {
+          dispatch(
+            getIssues(axios, () => {
+              reroute("/dashboard");
+            })
+          );
+        },
+      })
+    );
+  }
 
   return (
     <Container>
@@ -82,6 +130,21 @@ export default function QuestionDetails() {
           <div className="topic">
             <h1>Topic: {question.topic}</h1>
           </div>
+          <div className="content">
+            <p>{question.question}</p>
+          </div>
+          {user.id === question.question_user_id && (
+            <React.Fragment>
+              <div className="edit">
+                <button onClick={handleEdit}>Edit</button>
+              </div>
+              <div className="delete">
+                <button onClick={handleDelete} disabled={!deleteEnabled}>
+                  Delete
+                </button>
+              </div>
+            </React.Fragment>
+          )}
         </section>
       )}
     </Container>
