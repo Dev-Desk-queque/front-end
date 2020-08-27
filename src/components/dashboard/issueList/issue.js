@@ -1,9 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import useAxios from "../../../hooks/useAxios";
-import { deleteIssue, getIssues } from "../../../actions";
 import { HighlightedString } from "../../../utils/wordSearch";
 
 const Container = styled.section`
