@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import DynamicLink from '../DynamicLink';
+import DynamicLink from "../DynamicLink";
 import useAxios from "../../hooks/useAxios";
 
 const Container = styled.nav`
@@ -80,8 +80,9 @@ export default (props) => {
           <div className="links">
             <DynamicLink
               to="/login"
-              back="/"
+              back="https://lambda-dev-desk-queue-ui.netlify.app/"
               backText="Home"
+              isExternalBack
             >
               Login
             </DynamicLink>

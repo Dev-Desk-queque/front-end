@@ -75,8 +75,6 @@ export default function Sidebar() {
       return issue.question_user_id === user.id;
     })
   );
-  const allIssues = useSelector((state) => state.issues);
-
   const myAnswers = useSelector((state) => {
     const toReturn = state.issues.filter((issue) => {
       let shouldReturn = false;
