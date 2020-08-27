@@ -6,22 +6,18 @@ import useAxios from "../../../hooks/useAxios";
 import styled from "styled-components";
 
 const Container = styled.div`
-  display: grid;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100%;
   grid-gap: 2rem;
-  justify-content: center;
   align-items: center;
-  grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: repeat(5, 1fr);
+  overflow-y: scroll;
   .back-button {
-    grid-column: 3 / 4;
-    grid-row: 1 / 2;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    height: 100%;
+    margin-top: 2rem;
     a {
       display: flex;
       justify-content: center;
@@ -50,8 +46,8 @@ const Container = styled.div`
     justify-content: center;
     align-items: center;
     background: white;
-    width: 100%;
-    height: 100%;
+    width: 75%;
+    min-height: 15rem;
     box-shadow: 0.125rem 0.125rem 0.5rem 0rem black;
     border-radius: 2rem;
     grid-template-rows: repeat(6, 1fr);
@@ -68,6 +64,11 @@ const Container = styled.div`
     .content {
       grid-column: 2 / 6;
       grid-row: 2 / 6;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
     }
     .edit,
     .delete {

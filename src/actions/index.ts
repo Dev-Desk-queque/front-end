@@ -295,7 +295,7 @@ const getIssueUsers = (options: {
     arr.forEach((res, index) => {
       issuesToSend.push({ ...issues[index], username: res.data[0].username });
     });
-    returnAction(types.SET_ISSUES, issuesToSend, dispatch);
+    dispatch(getIssueAnswers({ axios, issues: issuesToSend, callback }));
     if (callback) {
       callback();
     }
@@ -304,8 +304,30 @@ const getIssueUsers = (options: {
 
 export const getIssueAnswers = (options: {
   axios: AxiosInstance;
-  issue: iIssue;
-}) => (dispatch: Function, getState: () => iState) => {};
+  issues: iIssue[];
+  callback?: Function;
+}) => (dispatch: Function, getState: () => iState) => {
+  const { axios, issues } = options;
+
+  if (!axios) {
+    throw axiosError;
+  }
+
+  const issuesToSend = [] as Array<iIssue>;
+
+  const promises = [] as Array<AxiosPromise>;
+
+  issues.forEach((issue) => {
+    promises.push(axios.get(`/api/devdesk/question/${issue.id}/answer`));
+  });
+
+  Promise.all(promises).then((prom) => {
+    prom.forEach((res, index) => {
+      issuesToSend.push({ ...issues[index], answers: res.data });
+    });
+    returnAction(types.SET_ISSUES, issuesToSend, dispatch);
+  });
+};
 
 /* UX ACTIONS */
 

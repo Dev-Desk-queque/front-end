@@ -1,7 +1,12 @@
 import { iAction, types, messageTypes } from "../actions";
 import decode from "jwt-decode";
 
-export type iAnswer = {};
+export type iAnswer = {
+  answer?: string;
+  answer_user_id?: number;
+  id?: number;
+  question_id?: number;
+};
 
 export type iIssueFilter = {
   showAnswered: boolean;
@@ -18,7 +23,7 @@ export type iIssue = {
   code_language?: string | null;
   question_user_id?: number;
   key?: string;
-  answer?: iAnswer;
+  answers?: Array<iAnswer>;
 };
 
 export type iSystemMessage = {
