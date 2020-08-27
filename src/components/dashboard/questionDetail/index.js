@@ -11,6 +11,7 @@ import { v4 as uuid } from "uuid";
 import useAxios from "../../../hooks/useAxios";
 import styled from "styled-components";
 import AnswerForm from "./answerForm";
+import Answer from "./answer";
 
 const Container = styled.div`
   display: flex;
@@ -191,6 +192,8 @@ export default function QuestionDetails() {
         issue: question,
         callback: () => {
           dispatch(getIssues(axios));
+          setAnswerValues({...answerValues, answer: ""});
+          setIsAnswering(false);
         },
       })
     );
@@ -252,11 +255,7 @@ export default function QuestionDetails() {
           {question.answers.length > 0 && (
             <div className="answers">
               {question.answers.map((answer) => {
-                return (
-                  <div key={uuid()}>
-                    <p>{answer.answer}</p>
-                  </div>
-                );
+                return <Answer answer={answer} user={user} key={uuid()} />;
               })}
             </div>
           )}

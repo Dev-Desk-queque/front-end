@@ -393,6 +393,29 @@ export const sendAnswer = (options: {
     });
 };
 
+export const deleteAnswer = (options: {
+  axios: AxiosInstance;
+  answer: iAnswer;
+  callback?: Function;
+}) => (dispatch: Function) => {
+  const { axios, answer, callback } = options;
+  if (!axios) throw axiosError;
+  returnAction(types.SET_NETWORK_LOADING, true, dispatch);
+  axios
+    .delete(`/api/devdesk/protected/question/${answer.id}/answer`)
+    .then(() => {
+      returnAction(types.SET_NETWORK_LOADING, false, dispatch);
+      dispatchMessage(messageTypes.INFORMATION, "Answer Deleted", dispatch);
+      if (callback) {
+        callback();
+      }
+    })
+    .catch((err) => {
+      returnAction(types.SET_NETWORK_LOADING, false, dispatch);
+      dispatchMessage(messageTypes.ERROR, err.message, dispatch);
+    });
+};
+
 /* UX ACTIONS */
 
 export const updateFilter = (filter: iIssueFilter) => (dispatch: Function) => {
