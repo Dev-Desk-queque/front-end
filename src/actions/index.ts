@@ -10,6 +10,8 @@ export enum types {
   SET_USER_LOGOUT = "SET_USER_LOGOUT",
   SET_USER = "SET_USER",
   SET_ISSUES = "SET_ISSUES",
+  SET_ISSUE_TO_EDIT = "SET_ISSUE_TO_EDIT",
+  REMOVE_ISSUE_TO_EDIT = "REMOVE_ISSUE_TO_EDIT",
   SET_ISSUE_ANSWERS = "SET_ISSUE_ANSWERS",
   SET_ISSUE_USER = "SET_ISSUE_USER",
   ADD_NEW_MESSAGE = "ADD_NEW_MESSAGE",
@@ -329,8 +331,54 @@ export const getIssueAnswers = (options: {
   });
 };
 
+export const sendEditedIssue = (options: {
+  axios: AxiosInstance;
+  issue: iIssue;
+  callback?: Function;
+}) => (dispatch: Function) => {
+  const { axios, issue, callback } = options;
+  if (!axios) throw axiosError;
+  const {
+    is_resolved,
+    question,
+    topic,
+    what_I_tried,
+    question_user_id,
+    code_language,
+  } = issue;
+  const toSend = {
+    is_resolved,
+    question,
+    topic,
+    what_I_tried,
+    question_user_id,
+    code_language,
+  };
+
+  returnAction(types.SET_NETWORK_LOADING, true, dispatch);
+  axios
+    .put(`/api/devdesk/protected/question/${issue.id}`, toSend)
+    .then((res) => {
+      dispatch(getIssues(axios, callback));
+    })
+    .catch((err) => {
+      returnAction(types.SET_NETWORK_LOADING, false, dispatch);
+      dispatchMessage(messageTypes.ERROR, err.message, dispatch);
+    });
+};
+
 /* UX ACTIONS */
 
 export const updateFilter = (filter: iIssueFilter) => (dispatch: Function) => {
   returnAction(types.UPDATE_FILTER, filter, dispatch);
+};
+
+export const editIssue = (options: { issue: iIssue; callback?: Function }) => (
+  dispatch: Function
+) => {
+  const { issue, callback } = options;
+  returnAction(types.SET_ISSUE_TO_EDIT, issue, dispatch);
+  if (callback) {
+    callback();
+  }
 };

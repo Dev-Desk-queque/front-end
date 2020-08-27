@@ -55,6 +55,7 @@ const initialState = {
   isHelper: false,
   systemMessages: [] as Array<iSystemMessage>,
   issueFilter: { showAnswered: false, textSearch: "" } as iIssueFilter,
+  issueToEdit: null as null | iIssue,
 };
 
 export type iState = typeof initialState;
@@ -111,6 +112,12 @@ export default function reducer(state = initialState, action: iAction): iState {
           } else return null;
         }),
       };
+
+    case types.SET_ISSUE_TO_EDIT:
+      return { ...state, issueToEdit: action.payload as iIssue };
+
+    case types.REMOVE_ISSUE_TO_EDIT:
+      return { ...state, issueToEdit: null };
 
     case types.UPDATE_FILTER:
       return { ...state, issueFilter: action.payload as iIssueFilter };
