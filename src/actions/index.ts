@@ -1,4 +1,4 @@
-import { AxiosInstance } from "axios";
+import { AxiosInstance, AxiosPromise } from "axios";
 import { v4 as uuid } from "uuid";
 import { iIssue, iIssueFilter, iState } from "../reducer";
 import decode from "jwt-decode";
@@ -193,8 +193,8 @@ export const getIssues = (axios: AxiosInstance) => (dispatch: Function) => {
         .map((issue: iIssue) => {
           return { ...issue, key: uuid() };
         });
+      dispatch(getIssueUsers({ axios, issues }));
       returnAction(types.SET_NETWORK_LOADING, false, dispatch);
-      returnAction(types.SET_ISSUES, issues, dispatch);
     })
     .catch((err) => {
       returnAction(types.SET_NETWORK_LOADING, false, dispatch);
@@ -217,7 +217,6 @@ export const submitNewIssue = (options: {
   returnAction(types.SET_NETWORK_LOADING, true, dispatch);
   const newIssue: iIssue = {
     ...issue,
-    code_language: "Java",
     question_user_id: user.id,
   };
   axios
@@ -234,7 +233,6 @@ export const submitNewIssue = (options: {
       }
     })
     .catch((err) => {
-      console.log(err.response);
       returnAction(types.SET_NETWORK_LOADING, false, dispatch);
       dispatchMessage(
         messageTypes.ERROR,
@@ -260,7 +258,6 @@ export const deleteIssue = (options: {
       returnAction(types.SET_NETWORK_LOADING, false, dispatch);
       dispatchMessage(messageTypes.INFORMATION, "Question deleted", dispatch);
       if (callback) {
-        console.log("calling callback");
         callback();
       }
     })
@@ -276,33 +273,27 @@ export const deleteIssue = (options: {
     });
 };
 
-export const getIssueUser = (options: {
+const getIssueUsers = (options: {
   axios: AxiosInstance;
-  issue: iIssue;
-}) => (dispatch: Function, getState: () => iState) => {
-  const stateIssue = getState().issues.find(
-    (i) => i.id === options.issue.id
-  ) as iIssue;
-  const { axios } = options;
+  issues: Array<iIssue>;
+}) => (dispatch: Function) => {
+  const { axios, issues } = options;
   if (!axios) {
     throw axiosError;
   }
-  axios
-    .get(`/api/devdesk/protected/user/${stateIssue.question_user_id}`)
-    .then((res) => {
-      returnAction(
-        types.SET_ISSUE_USER,
-        { ...stateIssue, username: res.data[0].username } as iIssue,
-        dispatch
-      );
-    })
-    .catch((err) => {
-      dispatchMessage(
-        messageTypes.ERROR,
-        `${err.message} ${err.response && err.response}`,
-        dispatch
-      );
+  const promises = [] as Array<AxiosPromise>;
+  const issuesToSend = [] as Array<iIssue>;
+  issues.forEach((issue) => {
+    promises.push(
+      axios.get(`/api/devdesk/protected/user/${issue.question_user_id}`)
+    );
+  });
+  Promise.all(promises).then((arr) => {
+    arr.forEach((res, index) => {
+      issuesToSend.push({ ...issues[index], username: res.data[0].username });
     });
+    returnAction(types.SET_ISSUES, issuesToSend, dispatch);
+  });
 };
 
 export const getIssueAnswers = (options: {

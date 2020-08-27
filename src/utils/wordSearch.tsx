@@ -13,15 +13,40 @@ const Formatted = styled.span`
   background: grey;
 `;
 
+const escapeChars = ["(", ")", "[", "]", "^", "$", ".", "+"];
+
 export function search(item: string, searchString: string) {
-  const regex = new RegExp(searchString, "i");
-  return regex.test(item);
+  if (item) {
+    try {
+      let parsedSearch = "";
+      for (let char of searchString) {
+        if (escapeChars.includes(char)) {
+          parsedSearch = `${parsedSearch}\\${char}`;
+        } else {
+          parsedSearch = `${parsedSearch}${char}`;
+        }
+      }
+      const regex = new RegExp(parsedSearch, "igm");
+      return regex.test(item);
+    } catch (err) {
+      return false;
+    }
+  } else return false;
 }
 
 export function HighlightedString(string: string): JSX.Element {
   const { textSearch } = useSelector((state: iState) => state.issueFilter);
 
-  const regex = new RegExp(`(${textSearch})`, "i");
+  let parsedSearch = "";
+  for (let char of textSearch) {
+    if (escapeChars.includes(char)) {
+      parsedSearch = `${parsedSearch}\\${char}`;
+    } else {
+      parsedSearch = `${parsedSearch}${char}`;
+    }
+  }
+
+  const regex = new RegExp(`(${parsedSearch})`, "i");
 
   const matched = string.split(regex).map((item: string) => {
     return (
@@ -36,6 +61,8 @@ export function HighlightedString(string: string): JSX.Element {
   });
 
   return (
-    <React.Fragment>{textSearch === "" ? string : matched}</React.Fragment>
+    <React.Fragment>
+      {string && textSearch === "" ? string : matched}
+    </React.Fragment>
   );
 }

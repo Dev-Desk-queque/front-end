@@ -61,7 +61,8 @@ export default styled.div`
       label,
       input,
       .checkbox,
-      textarea {
+      textarea,
+      select {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -86,6 +87,10 @@ export default styled.div`
         border-radius: 0.5rem;
         border: none;
         padding: 0rem 1rem;
+      }
+      select {
+        grid-column: 1 / 3;
+        margin: 0rem 10rem;
       }
       .checkbox {
         grid-column: 2 / 3;

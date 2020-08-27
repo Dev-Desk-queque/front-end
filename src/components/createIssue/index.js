@@ -4,13 +4,15 @@ import { useHistory } from "react-router-dom";
 import { submitNewIssue, getIssues } from "../../actions";
 import useAxios from "../../hooks/useAxios";
 import StyledForm from "../styledForm";
-import useForm from '../../hooks/useForm';
+import useForm from "../../hooks/useForm";
+import { PROGRAMMING_LANGUAGES } from "../../utils/constants";
+import { v4 as uuid } from "uuid";
 
 const initialFormValues = {
   topic: "",
   question: "",
   what_I_tried: "",
-  code_language: "",
+  code_language: "NONE",
 };
 
 export default function CreateIssue(props) {
@@ -33,6 +35,7 @@ export default function CreateIssue(props) {
       })
     );
   }
+
 
   return (
     <StyledForm>
@@ -67,6 +70,17 @@ export default function CreateIssue(props) {
             value={formValues.what_I_tried}
             onChange={onFormChange}
           />
+          <label htmlFor="code_language"></label>
+          <select
+            id="code_language"
+            name="code_language"
+            value={formValues.code_language}
+            onChange={onFormChange}
+          >
+            {PROGRAMMING_LANGUAGES.sort().map((lang) => {
+              return <option key={uuid()}>{lang}</option>;
+            })}
+          </select>
           <button>Submit</button>
         </form>
       </div>

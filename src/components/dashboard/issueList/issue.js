@@ -1,10 +1,9 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import useAxios from "../../../hooks/useAxios";
-import { deleteIssue, getIssues, getIssueUser } from "../../../actions";
+import { deleteIssue, getIssues } from "../../../actions";
 import { HighlightedString } from "../../../utils/wordSearch";
 
 const Container = styled.section`
@@ -77,12 +76,6 @@ export default function Issue({ issue, isMyIssue, ...props }) {
       deleteIssue({ axios, issue, callback: () => dispatch(getIssues(axios)) })
     );
   }
-  
-  useEffect(() => {
-    if (!issue.username) {
-      dispatch(getIssueUser({ axios, issue }));
-    }
-  }, []);
 
   function handleClick(e) {
     e.preventDefault();
@@ -95,7 +88,7 @@ export default function Issue({ issue, isMyIssue, ...props }) {
         <h5>Topic: {HighlightedString(issue.topic)}</h5>
       </div>
       <div className="username">
-        <p>{issue.username && issue.username}</p>
+        <p>{issue.username && HighlightedString(issue.username)}</p>
       </div>
       <div className="title">
         <p>Lang: {HighlightedString(issue.code_language)}</p>

@@ -14,7 +14,6 @@ function Register() {
   });
 
   const onSubmit = (data) => {
-    console.log(data);
     dispatch(
       registerUser({
         axios,
